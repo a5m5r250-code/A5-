@@ -292,8 +292,7 @@
   <div class="card">
     <h1 class="title">Tools</h1>
     <p class="subtitle">
-      تحويل <b>النص → QR</b> + تحويل <b>الصور / Word → نص & PDF</b> في صفحة واحدة، بدعم العربية والإنجليزية.
-    </p>
+       <b> A5 QR</b>   <b></b>     </p>
 
     <!-- Tabs -->
     <div class="tabs">
@@ -304,7 +303,7 @@
     <!-- Text → QR -->
     <div id="sectionQr" class="section">
       <label class="label" for="qrText">النص / الرابط</label>
-      <textarea id="qrText" placeholder="اكتب نص أو رابط لتحويله إلى QR..."></textarea>
+      <textarea id="qrText" placeholder="    اكتب..."></textarea>
 
       <div class="actions">
         <button id="btnQrGenerate" class="btn btn-green">CREATE QR</button>
@@ -314,7 +313,7 @@
       <div id="qrPreview" class="qr-box">
         <div class="qr-placeholder">
           لا يوجد رمز QR بعد<br/>
-          <span style="font-size:10px;">اكتب نصاً ثم اضغط CREATE QR</span>
+          <span style="font-size:10px;"> CREATE QR</span>
         </div>
       </div>
 
@@ -332,7 +331,7 @@
       <div id="fileName" class="file-name"></div>
 
       <span class="label" for="outputText">النص المستخرج</span>
-      <textarea id="outputText" placeholder="سيظهر هنا النص المستخرج (عربي / إنجليزي)..." readonly></textarea>
+      <textarea id="outputText" placeholder="xxx..." readonly></textarea>
 
       <div class="actions">
         <button id="btnExtract" class="btn btn-purple">EXTRACT</button>
@@ -380,7 +379,7 @@
     qrPreview.innerHTML = `
       <div class="qr-placeholder">
         لا يوجد رمز QR بعد<br/>
-        <span style="font-size:10px;">اكتب نصاً ثم اضغط CREATE QR</span>
+        <span style="font-size:10px;"></span>
       </div>
     `;
     qrDownload.classList.remove("visible");
@@ -411,7 +410,7 @@
   btnQrGenerate.addEventListener("click", () => {
     const txt = qrText.value.trim();
     if (!txt) {
-      alert("من فضلك اكتب نصاً أو رابطاً أولاً.");
+      alert(".");
       return;
     }
     createQr(txt);
