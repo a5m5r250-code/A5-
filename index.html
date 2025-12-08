@@ -2,625 +2,582 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>A5 Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A M R | QR & OCR Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- OCR للصور -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+  <!-- قراءة Word (DOCX) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+  <!-- إنشاء PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* ============ GLOBAL ============ */
+    * {
+      margin:0; padding:0; box-sizing:border-box;
+      font-family:system-ui,-apple-system,sans-serif;
+    }
+
     body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle at top, #1a1a28 0%, #0b0b12 50%, #000 100%);
-      font-family: "Segoe UI", system-ui, sans-serif;
-      color: #e5e7eb;
+      background:#050517;
+      color:#fff;
+      padding:20px;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .page {
-      max-width: 1200px;
-      margin: auto;
-      padding: 14px;
+    .shell {
+      width:100%;
+      max-width:540px;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    .brand {
+      text-align:center;
+      font-size:14px;
+      letter-spacing:.4em;
+      color:#c7d2fe;
+      margin-bottom:14px;
     }
 
-    /* ============ HEADER ============ */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 0 10px;
+    .card {
+      background:rgba(10,10,26,.96);
+      border-radius:20px;
+      padding:20px 18px 18px;
+      box-shadow:0 0 22px rgba(88,80,236,.45);
+      border:1px solid rgba(167,139,250,.55);
     }
 
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .title {
+      text-align:center;
+      font-size:20px;
+      margin-bottom:6px;
     }
 
-    .logo-img {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #a855f7;
-      box-shadow: 0 0 10px #a855f7aa;
+    .subtitle {
+      text-align:center;
+      font-size:11px;
+      color:#a1a1aa;
+      margin-bottom:18px;
+      line-height:1.7;
     }
 
-    .logo-text {
-      font-size: 17px;
-      font-weight: 800;
-      color: #c084fc;
+    /* Tabs (QR / Image-Word) */
+    .tabs {
+      display:flex;
+      margin-bottom:18px;
+      background:rgba(15,23,42,.95);
+      padding:3px;
+      border-radius:999px;
+      border:1px solid rgba(55,48,163,.9);
+      box-shadow:0 0 14px rgba(76,81,191,.45);
     }
 
-    .cart-btn {
-      background: linear-gradient(135deg, #a855f7, #6d28d9);
-      padding: 7px 11px;
-      border: none;
-      border-radius: 9px;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 12px;
-      box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .tab-btn {
+      flex:1;
+      border:none;
+      border-radius:999px;
+      padding:6px 4px;
+      font-size:9px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      background:transparent;
+      color:#a5b4fc;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.18s;
+      white-space:nowrap;
     }
 
-    .cart-badge {
-      min-width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: #22c55e;
-      color: #000;
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
+    .tab-btn.active {
+      background:linear-gradient(135deg,#6366f1,#a855f7);
+      color:#f9fafb;
+      box-shadow:0 0 10px rgba(129,140,248,.6);
     }
 
-    /* ============ CATEGORIES ============ */
-    .section-title {
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: 700;
+    .section {
+      margin-top:10px;
     }
 
-    .section-sub {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-top: 3px;
+    .label {
+      font-size:12px;
+      color:#e5e7eb;
+      margin-bottom:6px;
+      display:block;
     }
 
-    .categories {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
+    textarea {
+      width:100%;
+      border-radius:14px;
+      background:#020617;
+      border:1px solid #4b5563;
+      color:#e5e7eb;
+      padding:12px;
+      font-size:13px;
+      min-height:120px;
+      outline:none;
+      resize:vertical;
+      transition:.18s;
+      margin-bottom:16px; /* مسافة كبيرة بين الكتابة والأزرار */
     }
 
-    .cat-btn {
-      padding: 7px 12px;
-      font-size: 12px;
-      border-radius: 999px;
-      border: 1px solid #3f3f46;
-      background: #18181b;
-      color: #e5e7eb;
-      cursor: pointer;
+    textarea:focus {
+      border-color:#8b5cf6;
+      box-shadow:0 0 0 1px rgba(129,140,248,.65);
+      background:#030712;
     }
 
-    .cat-btn.active {
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      border-color: transparent;
-      box-shadow: 0 6px 18px rgba(129, 140, 248, 0.3);
+    .help {
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:-8px;
+      margin-bottom:16px;
     }
 
-    /* ============ PRODUCTS ============ */
-    .products-grid {
-      margin-top: 14px;
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
     }
 
-    .product-card {
-      background: #11111a;
-      border-radius: 14px;
-      padding: 9px;
-      border: 1px solid #27272a;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.45);
-      transition: 0.18s;
-      font-size: 12px;
+    .btn {
+      flex:1 1 48%;
+      border:none;
+      border-radius:999px;
+      padding:7px 8px;          /* أصغر ~ 50% */
+      font-size:10px;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      white-space:nowrap;
+      transition:.16s;
     }
 
-    .product-card:hover {
-      transform: translateY(-3px);
-      border-color: #a855f7;
-      box-shadow: 0 14px 32px rgba(168,85,247,0.25);
+    /* البنفسجي الافتراضي للأدوات (Extract / Copy / PDF / Clear / Photo-Word) */
+    .btn-purple {
+      background:linear-gradient(135deg,#6366f1,#a855f7);
+      color:#f9fafb;
+      box-shadow:0 0 10px rgba(129,140,248,.45); /* إضاءة 50% */
     }
 
-    .product-image {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 11px;
-      background-size: cover;
-      background-position: center;
-      margin-bottom: 6px;
+    /* الأخضر الهادئ فقط لأزرار CREATE / CLEAR الخاصة بالـ QR */
+    .btn-green {
+      background:linear-gradient(135deg,rgba(74,222,128,.18),rgba(34,197,94,.3));
+      border:1px solid rgba(34,197,94,.5);
+      color:#bbf7d0;
+      box-shadow:0 0 8px rgba(34,197,94,.35);    /* هالة خفيفة */
     }
 
-    .product-card h3 {
-      font-size: 12px;
-      margin-bottom: 2px;
+    .btn-outline {
+      background:#020617;
+      color:#e5e7eb;
+      border:1px solid rgba(129,140,248,.7);
+      box-shadow:0 0 8px rgba(15,23,42,.6);
     }
 
-    .product-card p {
-      font-size: 11px;
-      color: #9ca3af;
-      margin-bottom: 3px;
+    .btn:hover {
+      transform:translateY(-1px);
     }
 
-    .product-card strong {
-      font-size: 12px;
+    /* QR preview */
+    .qr-box {
+      margin-top:18px;
+      border-radius:16px;
+      border:1px dashed rgba(148,163,184,.6);
+      background:#020617;
+      min-height:180px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      box-shadow:0 0 14px rgba(15,23,42,.8);
+      text-align:center;
     }
 
-    .btn-add {
-      margin-top: 6px;
-      width: 100%;
-      padding: 7px;
-      border-radius: 9px;
-      border: none;
-      background: linear-gradient(135deg, #a855f7, #7c3aed);
-      color: white;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 11px;
-      box-shadow: 0 8px 20px rgba(168,85,247,0.4);
+    .qr-placeholder {
+      font-size:11px;
+      color:#6b7280;
     }
 
-    /* ============ CART PANEL ============ */
-    .cart-panel {
-      position: fixed;
-      top: 0;
-      right: -360px;
-      width: 320px;
-      max-width: 100%;
-      height: 100%;
-      background: #0f0f17;
-      border-left: 2px solid #a855f7;
-      box-shadow: -5px 0 20px rgba(0,0,0,0.4);
-      padding: 14px;
-      transition: 0.35s ease;
-      overflow-y: auto;
-      z-index: 50;
+    .download-link {
+      display:block;
+      margin:14px auto 0;
+      padding:8px 18px;
+      border-radius:999px;
+      border:1px solid rgba(167,139,250,.9);
+      background:radial-gradient(circle at top,#312e81,#020617 60%);
+      color:#e5e7eb;
+      text-decoration:none;
+      font-size:10px;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      text-align:center;
+      opacity:0;
+      pointer-events:none;
+      transition:.16s;
+      box-shadow:0 0 10px rgba(129,140,248,.5);
     }
 
-    .cart-panel.open {
-      right: 0;
+    .download-link.visible {
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(-1px);
     }
 
-    .cart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+    /* زر رفع الملف Photo / Word */
+    .upload-btn {
+      width:100%;
+      text-align:center;
+      border-radius:14px;
+      padding:9px 10px;
+      font-size:11px;
+      border:none;
+      cursor:pointer;
+      background:linear-gradient(135deg,#6366f1,#a855f7);
+      color:#f9fafb;
+      box-shadow:0 0 10px rgba(129,140,248,.45);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+    .upload-btn:hover { transform:translateY(-1px); }
+
+    #fileInput { display:none; }
+
+    .file-name {
+      font-size:10px;
+      color:#9ca3af;
+      margin-bottom:18px;
+      min-height:12px;
+      word-break:break-all;
     }
 
-    .cart-header h3 {
-      font-size: 15px;
+    .status {
+      margin-top:10px;
+      font-size:10px;
+      color:#9ca3af;
+      min-height:14px;
     }
 
-    .close-cart {
-      font-size: 16px;
-      color: #c084fc;
-      background: none;
-      border: none;
-      cursor: pointer;
+    .footer {
+      text-align:center;
+      font-size:11px;
+      color:#6b7280;
+      margin-top:10px;
     }
 
-    .cart-item {
-      padding: 8px 0;
-      border-bottom: 1px solid #27272a;
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .cart-item-main {
-      max-width: 70%;
-    }
-
-    .cart-item-meta {
-      text-align: left;
-      font-size: 11px;
-      color: #9ca3af;
-    }
-
-    .cart-footer {
-      margin-top: 14px;
-      padding: 9px;
-      background: #181825;
-      border-radius: 9px;
-      font-size: 12px;
-    }
-
-    .checkout-btn {
-      margin-top: 8px;
-      width: 100%;
-      padding: 10px;
-      background: #22c55e;
-      color: #000;
-      border-radius: 9px;
-      border: none;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    /* ============ TOAST ============ */
-    #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 12px;
-      transform: translateX(-50%) translateY(120%);
-      background: #18181b;
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-      border: 1px solid #3f3f46;
-      opacity: 0;
-      transition: 0.3s ease;
-      z-index: 60;
-    }
-
-    #toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-
-    #toast button {
-      border: none;
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      color: #fff;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    /* ============ MOBILE TWEAKS ============ */
-    @media (max-width: 768px) {
-      .page {
-        padding: 10px;
-      }
-
-      .logo-img {
-        width: 38px;
-        height: 38px;
-      }
-
-      .logo-text {
-        font-size: 14px;
-      }
-
-      .cart-btn {
-        font-size: 11px;
-        padding: 6px 9px;
-      }
-
-      .products-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .product-card {
-        padding: 8px;
-      }
-
-      .product-card h3 {
-        font-size: 11px;
-      }
-
-      .product-card p {
-        font-size: 10px;
-      }
-
-      .btn-add {
-        font-size: 10px;
-        padding: 6px;
-      }
-
-      .cart-panel {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width:480px) {
+      body { padding:14px 10px; }
+      .card { padding:18px 12px 16px; border-radius:18px; }
+      .btn { flex:1 1 100%; }
+      .shell { max-width:100%; }
     }
   </style>
 </head>
 
 <body>
+<div class="shell">
+  <div class="brand">A&nbsp;M&nbsp;R</div>
 
-<div class="page">
+  <div class="card">
+    <h1 class="title">Tools</h1>
+    <p class="subtitle">
+      تحويل <b>النص → QR</b> + تحويل <b>الصور / Word → نص & PDF</b> في صفحة واحدة، بدعم العربية والإنجليزية.
+    </p>
 
-  <!-- ========== HEADER ========== -->
-  <header class="header">
-    <div class="logo-wrap">
-      <!-- غيّر صورة المتجر هنا -->
-      <img src="images/store-logo.jpg" class="logo-img" alt="A5 Store Logo">
-      <div class="logo-text">A5 Store</div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button id="tabQr"  class="tab-btn active">QR CODE</button>
+      <button id="tabOcr" class="tab-btn">PHOTO / WORD</button>
     </div>
 
-    <button class="cart-btn" onclick="openCart()">
-      🛒 السلة
-      <span class="cart-badge" id="cartCount">0</span>
-    </button>
-  </header>
+    <!-- Text → QR -->
+    <div id="sectionQr" class="section">
+      <label class="label" for="qrText">النص / الرابط</label>
+      <textarea id="qrText" placeholder="اكتب نص أو رابط لتحويله إلى QR..."></textarea>
 
-  <!-- ========== SECTIONS / CATEGORIES ========== -->
-  <h2 class="section-title">منتجات مميزة</h2>
-  <p class="section-sub">اختر القسم، ثم أضف المنتجات للسلة وأكمل الطلب عبر واتساب.</p>
+      <div class="actions">
+        <button id="btnQrGenerate" class="btn btn-green">CREATE QR</button>
+        <button id="btnQrClear"    class="btn btn-green">CLEAR</button>
+      </div>
 
-  <div class="categories">
-    <button class="cat-btn active" data-category="all">الكل</button>
-    <button class="cat-btn" data-category="pages">قوالب وصفحات</button>
-    <button class="cat-btn" data-category="branding">براند & سوشيال</button>
+      <div id="qrPreview" class="qr-box">
+        <div class="qr-placeholder">
+          لا يوجد رمز QR بعد<br/>
+          <span style="font-size:10px;">اكتب نصاً ثم اضغط CREATE QR</span>
+        </div>
+      </div>
+
+      <a id="qrDownload" class="download-link" download="amr-qr.png">
+        DOWNLOAD QR
+      </a>
+    </div>
+
+    <!-- Image / Word → Text & PDF -->
+    <div id="sectionOcr" class="section" style="display:none;">
+
+      <!-- فقط زر Photo / Word بدون أى نص آخر -->
+      <label for="fileInput" class="upload-btn">PHOTO / WORD</label>
+      <input type="file" id="fileInput" accept="image/*,.docx" />
+      <div id="fileName" class="file-name"></div>
+
+      <span class="label" for="outputText">النص المستخرج</span>
+      <textarea id="outputText" placeholder="سيظهر هنا النص المستخرج (عربي / إنجليزي)..." readonly></textarea>
+
+      <div class="actions">
+        <button id="btnExtract" class="btn btn-purple">EXTRACT</button>
+        <button id="btnCopy"    class="btn btn-purple">COPY</button>
+        <button id="btnPdf"     class="btn btn-purple">PDF</button>
+        <button id="btnClear"   class="btn btn-outline">CLEAR</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
   </div>
 
-  <!-- ========== PRODUCTS GRID ========== -->
-  <div class="products-grid" id="productsGrid">
-
-    <!-- ===== قسم القوالب والصفحات (6 منتجات) ===== -->
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product1.jpg');"></div>
-      <h3>قالب صفحة شخصية داكن</h3>
-      <p>صفحة تعريفية فخمة وجاهزة للتعديل.</p>
-      <strong>$39</strong>
-      <button class="btn-add" onclick="addToCart('قالب صفحة شخصية داكن', 39)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product2.jpg');"></div>
-      <h3>قالب صفحة هبوط دورة</h3>
-      <p>مثالي لعرض دورة أونلاين.</p>
-      <strong>$49</strong>
-      <button class="btn-add" onclick="addToCart('قالب صفحة هبوط دورة', 49)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product3.jpg');"></div>
-      <h3>قالب متجر صفحة واحدة</h3>
-      <p>منتج واحد أو عرض خاص.</p>
-      <strong>$45</strong>
-      <button class="btn-add" onclick="addToCart('قالب متجر صفحة واحدة', 45)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product4.jpg');"></div>
-      <h3>سيرة ذاتية تفاعلية</h3>
-      <p>CV كصفحة ويب حديثة.</p>
-      <strong>$32</strong>
-      <button class="btn-add" onclick="addToCart('سيرة ذاتية تفاعلية', 32)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product5.jpg');"></div>
-      <h3>Landing Page لحملة إعلان</h3>
-      <p>صفحة بسيطة لتحويل العملاء.</p>
-      <strong>$35</strong>
-      <button class="btn-add" onclick="addToCart('Landing Page لحملة إعلان', 35)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="pages">
-      <div class="product-image" style="background-image:url('images/product6.jpg');"></div>
-      <h3>Portfolio للمصممين</h3>
-      <p>عرض أعمالك بأناقة واحترافية.</p>
-      <strong>$59</strong>
-      <button class="btn-add" onclick="addToCart('Portfolio للمصممين', 59)">إضافة للسلة</button>
-    </div>
-
-    <!-- ===== قسم البراند والسوشيال (6 منتجات) ===== -->
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product7.jpg');"></div>
-      <h3>حزمة بوستات سوشيال</h3>
-      <p>تصاميم جاهزة لإنستغرام وتيك توك.</p>
-      <strong>$25</strong>
-      <button class="btn-add" onclick="addToCart('حزمة بوستات سوشيال', 25)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product8.jpg');"></div>
-      <h3>هوية مرئية كاملة</h3>
-      <p>شعار، ألوان، خطوط، ودليل استخدام.</p>
-      <strong>$89</strong>
-      <button class="btn-add" onclick="addToCart('هوية مرئية كاملة', 89)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product9.jpg');"></div>
-      <h3>Mini Brand Kit</h3>
-      <p>شعار بسيط + ألوان سريعة.</p>
-      <strong>$19</strong>
-      <button class="btn-add" onclick="addToCart('Mini Brand Kit', 19)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product10.jpg');"></div>
-      <h3>حزمة Covers لقنوات</h3>
-      <p>كفرات جاهزة ليوتيوب وتويتش.</p>
-      <strong>$27</strong>
-      <button class="btn-add" onclick="addToCart('حزمة Covers لقنوات', 27)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product11.jpg');"></div>
-      <h3>قوالب إعلانات ممولة</h3>
-      <p>تصاميم جاهزة للإعلانات المدفوعة.</p>
-      <strong>$41</strong>
-      <button class="btn-add" onclick="addToCart('قوالب إعلانات ممولة', 41)">إضافة للسلة</button>
-    </div>
-
-    <div class="product-card" data-category="branding">
-      <div class="product-image" style="background-image:url('images/product12.jpg');"></div>
-      <h3>حزمة ستوري تفاعلية</h3>
-      <p>قصص جاهزة للتفاعل مع الجمهور.</p>
-      <strong>$29</strong>
-      <button class="btn-add" onclick="addToCart('حزمة ستوري تفاعلية', 29)">إضافة للسلة</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ========== CART PANEL ========== -->
-<div id="cartPanel" class="cart-panel">
-  <div class="cart-header">
-    <h3>🛒 السلة</h3>
-    <button class="close-cart" onclick="closeCart()">✖</button>
-  </div>
-
-  <div id="cartItems"></div>
-
-  <div class="cart-footer">
-    الإجمالي: $<span id="totalPrice">0.00</span>
-    <button class="checkout-btn" onclick="checkout()">إتمام الطلب عبر واتساب</button>
-  </div>
-</div>
-
-<!-- ========== TOAST (تأكيد الإضافة) ========== -->
-<div id="toast">
-  <span id="toastText">تمت إضافة المنتج إلى السلة</span>
-  <button onclick="goToCart()">عرض السلة</button>
+  <div class="footer">A M R / A5</div>
 </div>
 
 <script>
-  /* ========== إعداد الواتساب ========== */
-  const WHATSAPP_NUMBER = "201000000000"; // ← غيّر الرقم هنا فقط
+  // Tabs
+  const tabQr      = document.getElementById("tabQr");
+  const tabOcr     = document.getElementById("tabOcr");
+  const sectionQr  = document.getElementById("sectionQr");
+  const sectionOcr = document.getElementById("sectionOcr");
 
-  let cart = [];
+  tabQr.addEventListener("click", () => {
+    tabQr.classList.add("active");
+    tabOcr.classList.remove("active");
+    sectionQr.style.display  = "";
+    sectionOcr.style.display = "none";
+  });
 
-  /* إضافة للسلة مع كميات */
-  function addToCart(name, price) {
-    const existing = cart.find(item => item.name === name);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ name, price, qty: 1 });
-    }
-    updateCartCount();
-    showToast(name);
+  tabOcr.addEventListener("click", () => {
+    tabOcr.classList.add("active");
+    tabQr.classList.remove("active");
+    sectionOcr.style.display = "";
+    sectionQr.style.display  = "none";
+  });
+
+  /* === Text → QR === */
+  const qrText        = document.getElementById("qrText");
+  const btnQrGenerate = document.getElementById("btnQrGenerate");
+  const btnQrClear    = document.getElementById("btnQrClear");
+  const qrPreview     = document.getElementById("qrPreview");
+  const qrDownload    = document.getElementById("qrDownload");
+
+  function resetQr() {
+    qrPreview.innerHTML = `
+      <div class="qr-placeholder">
+        لا يوجد رمز QR بعد<br/>
+        <span style="font-size:10px;">اكتب نصاً ثم اضغط CREATE QR</span>
+      </div>
+    `;
+    qrDownload.classList.remove("visible");
+    qrDownload.removeAttribute("href");
   }
 
-  /* تحديث عدد العناصر في السلة (البادج) */
-  function updateCartCount() {
-    const count = cart.reduce((sum, item) => sum + item.qty, 0);
-    document.getElementById("cartCount").innerText = count;
-  }
+  function createQr(data) {
+    qrPreview.innerHTML = "";
+    const wrapper = document.createElement("div");
+    qrPreview.appendChild(wrapper);
 
-  /* فتح/إغلاق السلة */
-  function openCart() {
-    document.getElementById("cartPanel").classList.add("open");
-    renderCart();
-  }
-
-  function closeCart() {
-    document.getElementById("cartPanel").classList.remove("open");
-  }
-
-  /* عرض محتوى السلة */
-  function renderCart() {
-    const box = document.getElementById("cartItems");
-    box.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-      const subtotal = item.price * item.qty;
-      total += subtotal;
-
-      box.innerHTML += `
-        <div class="cart-item">
-          <div class="cart-item-main">
-            <strong>${item.name}</strong>
-            <div class="cart-item-meta">
-              الكمية: ${item.qty} × $${item.price}
-            </div>
-          </div>
-          <div>
-            $${subtotal.toFixed(2)}
-          </div>
-        </div>
-      `;
+    new QRCode(wrapper, {
+      text: data,
+      width: 220,
+      height: 220,
+      correctLevel: QRCode.CorrectLevel.H,
     });
 
-    document.getElementById("totalPrice").innerText = total.toFixed(2);
+    setTimeout(() => {
+      const img = wrapper.querySelector("img");
+      if (img && img.src) {
+        qrDownload.href = img.src;
+        qrDownload.classList.add("visible");
+      }
+    }, 200);
   }
 
-  /* إتمام الطلب عبر واتساب */
-  function checkout() {
-    if (cart.length === 0) {
-      alert("السلة فارغة");
+  btnQrGenerate.addEventListener("click", () => {
+    const txt = qrText.value.trim();
+    if (!txt) {
+      alert("من فضلك اكتب نصاً أو رابطاً أولاً.");
+      return;
+    }
+    createQr(txt);
+  });
+
+  btnQrClear.addEventListener("click", () => {
+    qrText.value = "";
+    resetQr();
+  });
+
+  resetQr();
+
+  /* === Image / Word → Text & PDF === */
+  const fileInput  = document.getElementById("fileInput");
+  const fileNameEl = document.getElementById("fileName");
+  const btnExtract = document.getElementById("btnExtract");
+  const btnCopy    = document.getElementById("btnCopy");
+  const btnPdf     = document.getElementById("btnPdf");
+  const btnClear   = document.getElementById("btnClear");
+  const outputText = document.getElementById("outputText");
+  const statusEl   = document.getElementById("status");
+
+  function setStatus(msg) {
+    statusEl.textContent = msg || "";
+  }
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files && fileInput.files[0]) {
+      fileNameEl.textContent = "Selected: " + fileInput.files[0].name;
+    } else {
+      fileNameEl.textContent = "";
+    }
+  });
+
+  btnExtract.addEventListener("click", () => {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) {
+      alert("من فضلك اختر ملفاً أولاً (صورة أو DOCX).");
       return;
     }
 
-    let msg = "طلب جديد من A5 Store%0A%0A";
-    cart.forEach(item => {
-      msg += `• ${item.name} — الكمية: ${item.qty} — الإجمالي: $${(item.price * item.qty).toFixed(2)}%0A`;
-    });
-    msg += `%0Aالإجمالي الكلي: $${document.getElementById("totalPrice").innerText}`;
+    const name = file.name.toLowerCase();
+    const type = file.type || "";
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-    window.open(url, "_blank");
-  }
+    // DOCX
+    if (name.endsWith(".docx")) {
+      if (!window.mammoth) {
+        alert("مشكلة في تحميل مكتبة DOCX، تأكد من اتصال الإنترنت.");
+        return;
+      }
+      setStatus("جاري قراءة ملف الـ Word...");
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const arrayBuffer = e.target.result;
+        window.mammoth.extractRawText({ arrayBuffer })
+          .then(result => {
+            const text = (result.value || "").trim();
+            outputText.value = text || "لم يتم العثور على نص في هذا الملف.";
+            setStatus("تم استخراج النص من ملف الـ Word.");
+          })
+          .catch(err => {
+            console.error(err);
+            setStatus("حدث خطأ أثناء قراءة ملف الـ Word.");
+            alert("حدث خطأ أثناء معالجة ملف الـ Word.");
+          });
+      };
+      reader.readAsArrayBuffer(file);
+      return;
+    }
 
-  /* Toast رسالة التأكيد */
-  let toastTimeout;
-  function showToast(productName) {
-    const toast = document.getElementById("toast");
-    const text = document.getElementById("toastText");
-    text.innerText = `تمت إضافة "${productName}" إلى السلة`;
-    toast.classList.add("show");
+    // IMAGE
+    if (type.startsWith("image/")) {
+      if (!window.Tesseract) {
+        alert("مشكلة في تحميل مكتبة OCR، تأكد من اتصال الإنترنت.");
+        return;
+      }
+      setStatus("جاري قراءة النص من الصورة...");
 
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2500);
-  }
-
-  function goToCart() {
-    document.getElementById("toast").classList.remove("show");
-    openCart();
-  }
-
-  /* فلترة الأقسام */
-  const catButtons = document.querySelectorAll(".cat-btn");
-  const productCards = document.querySelectorAll(".product-card");
-
-  catButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const category = btn.getAttribute("data-category");
-
-      catButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      productCards.forEach(card => {
-        const cardCat = card.getAttribute("data-category");
-        if (category === "all" || cardCat === category) {
-          card.style.display = "";
-        } else {
-          card.style.display = "none";
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imgData = e.target.result;
+        try {
+          const { Tesseract } = window;
+          const result = await Tesseract.recognize(
+            imgData,
+            "eng+ara",
+            {
+              logger: (m) => {
+                if (m.status === "recognizing text") {
+                  const p = Math.round(m.progress * 100);
+                  setStatus(`جاري التعرف على النص... ${p}%`);
+                }
+              }
+            }
+          );
+          const text = (result.data.text || "").trim();
+          outputText.value = text || "لم يتم العثور على نص واضح في الصورة.";
+          setStatus("تم الانتهاء من استخراج النص من الصورة.");
+        } catch (err) {
+          console.error(err);
+          setStatus("حدث خطأ أثناء قراءة الصورة.");
+          alert("حدث خطأ أثناء معالجة الصورة.");
         }
-      });
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    alert("الملف المدعوم: صورة (PNG/JPG...) أو DOCX فقط.");
+  });
+
+  btnCopy.addEventListener("click", async () => {
+    const txt = outputText.value.trim();
+    if (!txt) {
+      alert("لا يوجد نص لنسخه.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(txt);
+      setStatus("تم نسخ النص إلى الحافظة (Clipboard).");
+    } catch (e) {
+      console.error(e);
+      setStatus("لم يتم النسخ، جرّب النسخ يدوياً.");
+    }
+  });
+
+  btnPdf.addEventListener("click", () => {
+    const txt = outputText.value.trim();
+    if (!txt) {
+      alert("لا يوجد نص لتحويله إلى PDF.");
+      return;
+    }
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert("مشكلة في مكتبة PDF، تأكد من اتصال الإنترنت.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:"p", unit:"pt", format:"a4" });
+
+    const margin = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxWidth = pageWidth - margin * 2;
+    const lineHeight = 16;
+    let y = margin;
+
+    const lines = doc.splitTextToSize(txt, maxWidth);
+    lines.forEach(line => {
+      if (y + lineHeight > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y, { align:"left" });
+      y += lineHeight;
     });
+
+    doc.save("amr-text.pdf");
+    setStatus("تم إنشاء وتحميل ملف PDF.");
+  });
+
+  btnClear.addEventListener("click", () => {
+    fileInput.value = "";
+    fileNameEl.textContent = "";
+    outputText.value = "";
+    setStatus("");
   });
 </script>
 
