@@ -13,14 +13,14 @@ body {
   margin: 0;
   padding: 0;
   background: radial-gradient(circle at top, #1a1a28 0%, #0b0b12 50%, #000 100%);
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
   color: #e5e7eb;
 }
 
 .page {
   max-width: 1200px;
   margin: auto;
-  padding: 16px;
+  padding: 14px;
 }
 
 a {
@@ -34,114 +34,114 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0 16px;
+  padding: 6px 0 10px;
 }
 
 .logo-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .logo-img {
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #a855f7;
-  box-shadow: 0 0 12px #a855f7aa;
+  box-shadow: 0 0 10px #a855f7aa;
 }
 
 .logo-text {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 800;
   color: #c084fc;
 }
 
 .cart-btn {
   background: linear-gradient(135deg, #a855f7, #6d28d9);
-  padding: 8px 14px;
+  padding: 7px 11px;
   border: none;
-  border-radius: 10px;
+  border-radius: 9px;
   color: white;
   font-weight: 700;
   cursor: pointer;
-  font-size: 13px;
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+  font-size: 12px;
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
 }
 
 /* ===================== PRODUCTS ===================== */
 
 .section-title {
-  margin-top: 16px;
-  font-size: 18px;
+  margin-top: 10px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .section-sub {
-  font-size: 13px;
+  font-size: 12px;
   color: #9ca3af;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .products-grid {
-  margin-top: 18px;
+  margin-top: 14px;
   display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .product-card {
   background: #11111a;
-  border-radius: 18px;
-  padding: 12px;
+  border-radius: 16px;
+  padding: 10px;
   border: 1px solid #27272a;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.45);
-  transition: 0.22s;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+  transition: 0.2s;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: #a855f7;
-  box-shadow: 0 16px 40px rgba(168,85,247,0.25);
+  box-shadow: 0 14px 32px rgba(168,85,247,0.25);
 }
 
 .product-image {
   width: 100%;
   aspect-ratio: 4/3;
-  border-radius: 12px;
+  border-radius: 11px;
   background-size: cover;
   background-position: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .product-card h3 {
-  font-size: 14px;
-  margin-bottom: 3px;
+  font-size: 13px;
+  margin-bottom: 2px;
 }
 
 .product-card p {
-  font-size: 12px;
+  font-size: 11px;
   color: #9ca3af;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .product-card strong {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .btn-add {
-  margin-top: 8px;
+  margin-top: 7px;
   width: 100%;
-  padding: 9px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 9px;
   border: none;
   background: linear-gradient(135deg, #a855f7, #7c3aed);
   color: white;
   cursor: pointer;
   font-weight: 700;
-  font-size: 13px;
-  box-shadow: 0 10px 24px rgba(168,85,247,0.4);
+  font-size: 12px;
+  box-shadow: 0 8px 20px rgba(168,85,247,0.4);
 }
 
 /* ===================== CART PANEL ===================== */
@@ -151,11 +151,12 @@ a {
   top: 0;
   right: -360px;
   width: 320px;
+  max-width: 100%;
   height: 100%;
   background: #0f0f17;
   border-left: 2px solid #a855f7;
   box-shadow: -5px 0 20px rgba(0,0,0,0.4);
-  padding: 18px;
+  padding: 16px;
   transition: 0.35s ease;
   overflow-y: auto;
   z-index: 50;
@@ -169,38 +170,42 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.cart-header h3 {
+  font-size: 15px;
 }
 
 .cart-item {
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #27272a;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .cart-footer {
-  margin-top: 16px;
-  padding: 10px;
+  margin-top: 14px;
+  padding: 9px;
   background: #181825;
-  border-radius: 10px;
-  font-size: 13px;
+  border-radius: 9px;
+  font-size: 12px;
 }
 
 .checkout-btn {
-  margin-top: 10px;
+  margin-top: 8px;
   width: 100%;
-  padding: 11px;
+  padding: 10px;
   background: #22c55e;
   color: #000;
-  border-radius: 10px;
+  border-radius: 9px;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   cursor: pointer;
 }
 
 .close-cart {
-  font-size: 18px;
+  font-size: 16px;
   color: #c084fc;
   background: none;
   border: none;
@@ -211,21 +216,21 @@ a {
 
 @media (max-width: 768px) {
   .page {
-    padding: 12px;
+    padding: 10px;
   }
 
   .logo-img {
-    width: 46px;
-    height: 46px;
+    width: 40px;
+    height: 40px;
   }
 
   .logo-text {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .cart-btn {
-    font-size: 12px;
-    padding: 7px 12px;
+    font-size: 11px;
+    padding: 6px 10px;
   }
 
   .products-grid {
@@ -233,12 +238,24 @@ a {
   }
 
   .product-card {
-    padding: 10px;
+    padding: 9px;
+  }
+
+  .product-card h3 {
+    font-size: 12px;
+  }
+
+  .product-card p {
+    font-size: 11px;
+  }
+
+  .btn-add {
+    font-size: 11px;
+    padding: 7px;
   }
 
   .cart-panel {
     width: 100%;
-    max-width: 360px;
   }
 }
 
@@ -306,7 +323,6 @@ function checkout(){
   let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
   window.open(url, "_blank");
 }
-
 </script>
 
 
@@ -317,7 +333,7 @@ function checkout(){
 
     <div class="logo-wrap">
       <!-- غيّر صورة المتجر من هنا -->
-      <img src="logo/a5m5r.blue.png" class="logo-img" alt="A5 Store Logo">
+      <img src="images/store-logo.jpg" class="logo-img" alt="A5 Store Logo">
       <div class="logo-text">A5 Store</div>
     </div>
 
@@ -353,7 +369,7 @@ function checkout(){
     <div class="product-card">
       <div class="product-image" style="background-image:url('images/product3.jpg');"></div>
       <h3>هوية مرئية كاملة</h3>
-      <p>شعار + ألوان + خطوط + دليل استخدام.</p>
+      <p>شعار، ألوان، خطوط، ودليل استخدام.</p>
       <strong>$89</strong>
       <button class="btn-add" onclick="addToCart('هوية مرئية كاملة', 89)">إضافة للسلة</button>
     </div>
@@ -389,7 +405,7 @@ function checkout(){
     <div class="product-card">
       <div class="product-image" style="background-image:url('images/product7.jpg');"></div>
       <h3>صفحة تعريف لمؤثر</h3>
-      <p>روابط، إحصائيات، ومساحة للعروض.</p>
+      <p>روابط، أرقام، ومساحة للعروض.</p>
       <strong>$42</strong>
       <button class="btn-add" onclick="addToCart('صفحة تعريف لمؤثر', 42)">إضافة للسلة</button>
     </div>
