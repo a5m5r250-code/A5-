@@ -2,287 +2,205 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>A M R | Image → Text</title>
+  <title>A5 Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- مكتبة OCR Tesseract.js -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
     body {
-      background:#05060a;
-      color:#fff;
-      padding:20px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-      position:relative;
-      overflow:hidden;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1f2933 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      line-height: 1.7;
     }
 
-    /* إضاءة بنفسجية خلفية */
-    body::before {
-      content:"";
-      position:absolute;
-      width:900px;
-      height:900px;
-      background:radial-gradient(circle, rgba(140,82,255,0.4), transparent 70%);
-      top:-300px;
-      left:-200px;
-      filter:blur(80px);
-      z-index:-1;
-      animation: glow 6s infinite alternate ease-in-out;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    @keyframes glow {
-      from { opacity:.4; transform:scale(1); }
-      to   { opacity:.7; transform:scale(1.15); }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
     }
 
-    .shell { width:100%; max-width:550px; }
-
-    .brand {
-      text-align:center;
-      font-size:14px;
-      letter-spacing:.4em;
-      color:#b8a8ff;
-      margin-bottom:10px;
+    /* NAV */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
     }
 
-    .container {
-      background:rgba(15,15,25,0.9);
-      padding:22px;
-      border-radius:20px;
-      backdrop-filter:blur(10px);
-      border:1px solid rgba(160,155,255,0.2);
-      box-shadow:0 0 40px rgba(90,50,255,0.25);
-      margin-bottom:12px;
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a855f7;
     }
 
-    .title { text-align:center; font-size:22px; margin-bottom:6px; }
-    .subtitle { text-align:center; font-size:12px; color:#b3b3b3; margin-bottom:12px; }
-
-    /* صف الصور (لديكور مثل موقعك السابق) */
-    .img-row {
-      display:flex;
-      gap:10px;
-      margin-bottom:16px;
-    }
-    .img-box {
-      flex:1;
-      border-radius:14px;
-      height:70px;
-      background:linear-gradient(135deg,#1f2937,#4c1d95);
-      box-shadow:0 0 18px rgba(76,29,149,0.6);
-      overflow:hidden;
-    }
-    /* لو حابب صور حقيقية غيّر هنا:
-    .img-box:nth-child(1){ background-image:url('image1.jpg'); background-size:cover; background-position:center; }
-    .img-box:nth-child(2){ background-image:url('image2.jpg'); background-size:cover; background-position:center; }
-    */
-
-    /* اختيار الصورة */
-    .file-box {
-      background:#0f1122;
-      border:1px solid #6d5aff80;
-      border-radius:12px;
-      padding:12px;
-      text-align:center;
-      font-size:13px;
-      color:#e5e7eb;
-      cursor:pointer;
-      margin-bottom:10px;
-    }
-    .file-box span {
-      opacity:.9;
-    }
-    #imageInput { display:none; }
-
-    .file-name {
-      font-size:11px;
-      color:#9ca3af;
-      margin-top:4px;
-      word-break:break-all;
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+      padding: 32px 24px;
+      border-radius: 26px;
+      background: #111827c7;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      margin-bottom: 42px;
     }
 
-    textarea {
-      width:100%;
-      border-radius:12px;
-      background:#0f1122;
-      border:1px solid #6d5aff80;
-      color:white;
-      padding:12px;
-      font-size:13px;
-      min-height:120px;
-      margin-top:10px;
-      outline:none;
-      resize:vertical;
+    .hero-title {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 700;
+      margin-bottom: 10px;
     }
 
-    .actions {
-      display:flex;
-      gap:10px;
-      margin-top:12px;
-      flex-wrap:wrap;
+    .hero-sub {
+      font-size: 15px;
+      color: #9ca3af;
+      max-width: 420px;
+      margin-bottom: 24px;
     }
 
-    .btn {
-      flex:1;
-      padding:10px;
-      border-radius:30px;
-      border:none;
-      cursor:pointer;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:13px;
-      transition:.2s;
-      text-align:center;
-    }
-    .btn-primary {
-      background:linear-gradient(135deg,#6a5bff,#b27bff);
-      color:white;
-      box-shadow:0 0 14px rgba(130,90,255,.6);
-    }
-    .btn-secondary {
-      background:#0f1122;
-      border:1px solid #6d6dff80;
-      color:#ddd;
-    }
-    .btn:hover { transform:translateY(-2px); }
-
-    .status {
-      margin-top:8px;
-      font-size:11px;
-      color:#9ca3af;
-      min-height:14px;
+    .btn-main {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #f9fafb;
+      margin-bottom: 10px;
     }
 
-    .footer { text-align:center; font-size:11px; color:#777; margin-top:6px; }
+    /* PRODUCTS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: #0f172ac7;
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 15px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 10px;
+    }
+
+    .btn-order {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #a855f7;
+      color: white;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-sub {
+        margin: auto;
+      }
+    }
   </style>
 </head>
 
 <body>
-<div class="shell">
 
-  <div class="brand">A M R</div>
+  <!-- رابط الطلب الموحد لجميع المنتجات -->
+  <script>
+    const orderLink = "https://instagram.com"; // ← غير الرقم هنا فقط
+  </script>
 
-  <div class="container">
-    <h1 class="title">Image → Text</h1>
-    <p class="subtitle">ارفع صورة تحتوي على نص، وسيتم استخراج النص منها.</p>
+  <div class="page">
 
-    <div class="img-row">
-      <div class="img-box"></div>
-      <div class="img-box"></div>
-    </div>
+    <!-- NAV -->
+    <header class="nav">
+      <div class="logo">A5 Store</div>
+    </header>
 
-    <!-- اختيار الصورة -->
-    <label class="file-box" for="imageInput">
-      <span>اختر صورة من جهازك (Screenshot / صورة نص)</span>
-    </label>
-    <input type="file" id="imageInput" accept="image/*" />
-    <div id="fileName" class="file-name"></div>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <h1 class="hero-title">مرحباً في A5 Store</h1>
+        <p class="hero-sub">A5.</p>
 
-    <!-- ناتج النص -->
-    <textarea id="outputText" placeholder="سيظهر هنا النص المستخرج من الصورة..." readonly></textarea>
+        <button class="btn-main" id="viewWorkBtn">  STORE</button>
+      </div>
+    </section>
 
-    <div class="actions">
-      <button id="extractBtn" class="btn btn-primary">Extract Text</button>
-      <button id="copyBtn" class="btn btn-secondary">Copy</button>
-      <button id="clearBtn" class="btn btn-secondary">Clear</button>
-    </div>
+    <!-- PRODUCTS -->
+    <section id="portfolio">
+      <h2 style="margin-bottom: 10px;">منتجاتنا</h2>
 
-    <div id="status" class="status"></div>
+      <div class="products-grid">
+
+        <!-- مثال منتج 1 (غيّر الصورة من هنا) -->
+        <div class="product-card">
+          <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
+          <h3>350  </h3>
+          <p style="font-size:13px;color:#9ca3af;">   TEST 1.</p>
+          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
+        </div>
+
+        <!-- مثال منتج 2 -->
+        <div class="product-card">
+          <div class="product-image" style="background-image:url('logo/a5m5r.red.png');"></div>
+          <h3> 150</h3>
+          <p style="font-size:13px;color:#9ca3af;">  TEST 2.</p>
+          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
+        </div>
+
+        <!-- مثال منتج 3 -->
+        <div class="product-card">
+          <div class="product-image" style="background-image:url('logo/a5m5r.red.png');"></div>
+          <h3>250  </h3>
+          <p style="font-size:13px;color:#9ca3af;">   TEXT 3.</p>
+          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
+        </div>
+
+      </div>
+    </section>
+
   </div>
 
-  <div class="footer">A M R / A5</div>
-</div>
+  <script>
+    document.getElementById("viewWorkBtn").onclick = function () {
+      document.getElementById("portfolio").scrollIntoView({ behavior: "smooth" });
+    };
 
-<script>
-  const imageInput = document.getElementById("imageInput");
-  const fileName   = document.getElementById("fileName");
-  const extractBtn = document.getElementById("extractBtn");
-  const copyBtn    = document.getElementById("copyBtn");
-  const clearBtn   = document.getElementById("clearBtn");
-  const outputText = document.getElementById("outputText");
-  const statusEl   = document.getElementById("status");
-
-  // عرض اسم الملف
-  imageInput.addEventListener("change", () => {
-    if (imageInput.files && imageInput.files[0]) {
-      fileName.textContent = "Selected: " + imageInput.files[0].name;
-    } else {
-      fileName.textContent = "";
+    function orderNow() {
+      window.open(orderLink, "_blank");
     }
-  });
-
-  // زر استخراج النص من الصورة
-  extractBtn.addEventListener("click", async () => {
-    const file = imageInput.files && imageInput.files[0];
-    if (!file) {
-      alert("من فضلك اختر صورة أولاً.");
-      return;
-    }
-
-    statusEl.textContent = "جاري قراءة النص من الصورة...";
-
-    try {
-      const { Tesseract } = window;
-      const reader = new FileReader();
-
-      reader.onload = async (e) => {
-        const imgData = e.target.result;
-
-        const result = await Tesseract.recognize(
-          imgData,
-          "eng", // يمكن تجربة "ara" للعربية إذا كانت مدعومة في البيئة
-          {
-            logger: (m) => {
-              if (m.status === "recognizing text") {
-                const p = Math.round(m.progress * 100);
-                statusEl.textContent = `جاري التعرف على النص... ${p}%`;
-              }
-            },
-          }
-        );
-
-        outputText.value = result.data.text.trim() || "لم يتم العثور على نص واضح في الصورة.";
-        statusEl.textContent = "تم الانتهاء من استخراج النص.";
-      };
-
-      reader.readAsDataURL(file);
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = "حدث خطأ أثناء قراءة الصورة.";
-      alert("حدث خطأ أثناء معالجة الصورة.");
-    }
-  });
-
-  // زر النسخ
-  copyBtn.addEventListener("click", async () => {
-    const txt = outputText.value.trim();
-    if (!txt) {
-      alert("لا يوجد نص لنسخه.");
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(txt);
-      statusEl.textContent = "تم نسخ النص إلى الحافظة.";
-    } catch {
-      statusEl.textContent = "لم يتم النسخ، جرّب نسخ النص يدوياً.";
-    }
-  });
-
-  // زر مسح
-  clearBtn.addEventListener("click", () => {
-    imageInput.value = "";
-    fileName.textContent = "";
-    outputText.value = "";
-    statusEl.textContent = "";
-  });
-</script>
+  </script>
 
 </body>
 </html>
