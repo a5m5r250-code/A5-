@@ -2,283 +2,287 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>A M R | Text → QR</title>
+  <title>A M R | Image → Text</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- مكتبة QR -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- مكتبة OCR Tesseract.js -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 
   <style>
-    * {
-      margin:0; padding:0; box-sizing:border-box;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; }
 
     body {
-      background:#050517;
-      color:#f9fafb;
-      min-height:100vh;
+      background:#05060a;
+      color:#fff;
+      padding:20px;
       display:flex;
-      justify-content:center;
       align-items:center;
-      padding:18px;
+      justify-content:center;
+      min-height:100vh;
+      position:relative;
+      overflow:hidden;
     }
 
-    .shell {
-      width:100%;
-      max-width:520px;
+    /* إضاءة بنفسجية خلفية */
+    body::before {
+      content:"";
+      position:absolute;
+      width:900px;
+      height:900px;
+      background:radial-gradient(circle, rgba(140,82,255,0.4), transparent 70%);
+      top:-300px;
+      left:-200px;
+      filter:blur(80px);
+      z-index:-1;
+      animation: glow 6s infinite alternate ease-in-out;
     }
+
+    @keyframes glow {
+      from { opacity:.4; transform:scale(1); }
+      to   { opacity:.7; transform:scale(1.15); }
+    }
+
+    .shell { width:100%; max-width:550px; }
 
     .brand {
       text-align:center;
       font-size:14px;
       letter-spacing:.4em;
-      color:#c7d2fe;
+      color:#b8a8ff;
+      margin-bottom:10px;
+    }
+
+    .container {
+      background:rgba(15,15,25,0.9);
+      padding:22px;
+      border-radius:20px;
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(160,155,255,0.2);
+      box-shadow:0 0 40px rgba(90,50,255,0.25);
       margin-bottom:12px;
     }
 
-    .card {
-      background:rgba(10,10,26,.95);
-      border-radius:20px;
-      padding:20px 16px 18px;
-      border:1px solid rgba(167,139,250,.6);
-      box-shadow:0 0 26px rgba(88,80,236,.45);
-    }
+    .title { text-align:center; font-size:22px; margin-bottom:6px; }
+    .subtitle { text-align:center; font-size:12px; color:#b3b3b3; margin-bottom:12px; }
 
-    .title {
+    /* صف الصور (لديكور مثل موقعك السابق) */
+    .img-row {
+      display:flex;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .img-box {
+      flex:1;
+      border-radius:14px;
+      height:70px;
+      background:linear-gradient(135deg,#1f2937,#4c1d95);
+      box-shadow:0 0 18px rgba(76,29,149,0.6);
+      overflow:hidden;
+    }
+    /* لو حابب صور حقيقية غيّر هنا:
+    .img-box:nth-child(1){ background-image:url('image1.jpg'); background-size:cover; background-position:center; }
+    .img-box:nth-child(2){ background-image:url('image2.jpg'); background-size:cover; background-position:center; }
+    */
+
+    /* اختيار الصورة */
+    .file-box {
+      background:#0f1122;
+      border:1px solid #6d5aff80;
+      border-radius:12px;
+      padding:12px;
       text-align:center;
-      font-size:20px;
-      margin-bottom:4px;
-    }
-
-    .subtitle {
-      text-align:center;
-      font-size:11px;
-      color:#a1a1aa;
-      margin-bottom:18px;
-      line-height:1.7;
-    }
-
-    .label {
-      font-size:12px;
+      font-size:13px;
       color:#e5e7eb;
-      margin-bottom:6px;
-      display:block;
+      cursor:pointer;
+      margin-bottom:10px;
+    }
+    .file-box span {
+      opacity:.9;
+    }
+    #imageInput { display:none; }
+
+    .file-name {
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:4px;
+      word-break:break-all;
     }
 
     textarea {
       width:100%;
-      border-radius:14px;
-      background:#020617;
-      border:1px solid #4b5563;
-      color:#e5e7eb;
+      border-radius:12px;
+      background:#0f1122;
+      border:1px solid #6d5aff80;
+      color:white;
       padding:12px;
       font-size:13px;
       min-height:120px;
+      margin-top:10px;
       outline:none;
       resize:vertical;
-      transition:.18s;
-      margin-bottom:16px; /* مسافة بين الكتابة والأزرار */
-    }
-
-    textarea:focus {
-      border-color:#8b5cf6;
-      box-shadow:0 0 0 1px rgba(129,140,248,.6);
-      background:#030712;
-    }
-
-    .help {
-      font-size:11px;
-      color:#9ca3af;
-      margin-top:-8px;
-      margin-bottom:18px;
     }
 
     .actions {
       display:flex;
-      flex-wrap:wrap;
       gap:10px;
-      margin-bottom:18px;
+      margin-top:12px;
+      flex-wrap:wrap;
     }
 
     .btn {
-      flex:1 1 48%;
+      flex:1;
+      padding:10px;
+      border-radius:30px;
       border:none;
-      border-radius:999px;
-      padding:9px 10px;
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
       cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      white-space:nowrap;
-      transition:.18s;
-    }
-
-    /* كل الأزراااار بنفسجية بإضاءة هادئة */
-    .btn-purple {
-      background:linear-gradient(135deg,#6366f1,#a855f7);
-      color:#f9fafb;
-      box-shadow:0 0 14px rgba(129,140,248,.35); /* إضاءة هادئة */
-    }
-
-    .btn-purple:hover {
-      transform:translateY(-1px);
-      box-shadow:0 0 18px rgba(129,140,248,.45);
-    }
-
-    .qr-box {
-      margin-top:6px;
-      border-radius:16px;
-      border:1px dashed rgba(148,163,184,.7);
-      background:#020617;
-      min-height:190px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      box-shadow:0 0 18px rgba(15,23,42,.85);
-      text-align:center;
-    }
-
-    .qr-placeholder {
-      font-size:11px;
-      color:#6b7280;
-    }
-
-    .download-link {
-      display:block;
-      margin:14px auto 0;
-      padding:8px 20px;
-      border-radius:999px;
-      border:1px solid rgba(167,139,250,.9);
-      background:radial-gradient(circle at top,#312e81,#020617 60%);
-      color:#e5e7eb;
-      text-decoration:none;
-      font-size:10px;
-      letter-spacing:.15em;
       text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:13px;
+      transition:.2s;
       text-align:center;
-      opacity:0;
-      pointer-events:none;
-      transition:.18s;
-      box-shadow:0 0 14px rgba(129,140,248,.35); /* إضاءة بنفسجية هادئة */
     }
-
-    .download-link.visible {
-      opacity:1;
-      pointer-events:auto;
-      transform:translateY(-1px);
+    .btn-primary {
+      background:linear-gradient(135deg,#6a5bff,#b27bff);
+      color:white;
+      box-shadow:0 0 14px rgba(130,90,255,.6);
     }
+    .btn-secondary {
+      background:#0f1122;
+      border:1px solid #6d6dff80;
+      color:#ddd;
+    }
+    .btn:hover { transform:translateY(-2px); }
 
-    .footer {
-      text-align:center;
+    .status {
+      margin-top:8px;
       font-size:11px;
-      color:#6b7280;
-      margin-top:10px;
+      color:#9ca3af;
+      min-height:14px;
     }
 
-    @media (max-width:480px) {
-      body { padding:14px 10px; }
-      .card { padding:18px 12px 16px; border-radius:18px; }
-      .btn { flex:1 1 100%; }
-      .shell { max-width:100%; }
-    }
+    .footer { text-align:center; font-size:11px; color:#777; margin-top:6px; }
   </style>
 </head>
+
 <body>
-  <div class="shell">
-    <div class="brand">A&nbsp;M&nbsp;R</div>
+<div class="shell">
 
-    <div class="card">
-      <h1 class="title">Text → QR</h1>
-      <p class="subtitle">
-      </p>
+  <div class="brand">A M R</div>
 
-      <label class="label" for="qrText">النص / الرابط</label>
-      <textarea id="qrText" placeholder="    اكتب هنا..."></textarea>
+  <div class="container">
+    <h1 class="title">Image → Text</h1>
+    <p class="subtitle">ارفع صورة تحتوي على نص، وسيتم استخراج النص منها.</p>
 
-      <div class="help">
-QR A5      </div>
-
-      <div class="actions">
-        <button id="btnQrGenerate" class="btn btn-purple">CREATE QR</button>
-        <button id="btnQrClear"    class="btn btn-purple">CLEAR</button>
-      </div>
-
-      <div id="qrPreview" class="qr-box">
-        <div class="qr-placeholder">
-           <br/>
-          <span style="font-size:10px;">   XXXXXX CREATE QR</span>
-        </div>
-      </div>
-
-      <a id="qrDownload" class="download-link" download="amr-qr.png">
-        DOWNLOAD
-      </a>
+    <div class="img-row">
+      <div class="img-box"></div>
+      <div class="img-box"></div>
     </div>
 
-    <div class="footer">A M R / A5</div>
+    <!-- اختيار الصورة -->
+    <label class="file-box" for="imageInput">
+      <span>اختر صورة من جهازك (Screenshot / صورة نص)</span>
+    </label>
+    <input type="file" id="imageInput" accept="image/*" />
+    <div id="fileName" class="file-name"></div>
+
+    <!-- ناتج النص -->
+    <textarea id="outputText" placeholder="سيظهر هنا النص المستخرج من الصورة..." readonly></textarea>
+
+    <div class="actions">
+      <button id="extractBtn" class="btn btn-primary">Extract Text</button>
+      <button id="copyBtn" class="btn btn-secondary">Copy</button>
+      <button id="clearBtn" class="btn btn-secondary">Clear</button>
+    </div>
+
+    <div id="status" class="status"></div>
   </div>
 
-  <script>
-    const qrText        = document.getElementById("qrText");
-    const btnQrGenerate = document.getElementById("btnQrGenerate");
-    const btnQrClear    = document.getElementById("btnQrClear");
-    const qrPreview     = document.getElementById("qrPreview");
-    const qrDownload    = document.getElementById("qrDownload");
+  <div class="footer">A M R / A5</div>
+</div>
 
-    function resetQr() {
-      qrPreview.innerHTML = `
-        <div class="qr-placeholder">
-          <br/>
-          <span style="font-size:10px;">     X</span>
-        </div>
-      `;
-      qrDownload.classList.remove("visible");
-      qrDownload.removeAttribute("href");
+<script>
+  const imageInput = document.getElementById("imageInput");
+  const fileName   = document.getElementById("fileName");
+  const extractBtn = document.getElementById("extractBtn");
+  const copyBtn    = document.getElementById("copyBtn");
+  const clearBtn   = document.getElementById("clearBtn");
+  const outputText = document.getElementById("outputText");
+  const statusEl   = document.getElementById("status");
+
+  // عرض اسم الملف
+  imageInput.addEventListener("change", () => {
+    if (imageInput.files && imageInput.files[0]) {
+      fileName.textContent = "Selected: " + imageInput.files[0].name;
+    } else {
+      fileName.textContent = "";
+    }
+  });
+
+  // زر استخراج النص من الصورة
+  extractBtn.addEventListener("click", async () => {
+    const file = imageInput.files && imageInput.files[0];
+    if (!file) {
+      alert("من فضلك اختر صورة أولاً.");
+      return;
     }
 
-    function createQr(data) {
-      qrPreview.innerHTML = "";
-      const wrapper = document.createElement("div");
-      qrPreview.appendChild(wrapper);
+    statusEl.textContent = "جاري قراءة النص من الصورة...";
 
-      new QRCode(wrapper, {
-        text: data,
-        width: 220,
-        height: 220,
-        correctLevel: QRCode.CorrectLevel.H,
-      });
+    try {
+      const { Tesseract } = window;
+      const reader = new FileReader();
 
-      setTimeout(() => {
-        const img = wrapper.querySelector("img");
-        if (img && img.src) {
-          qrDownload.href = img.src;
-          qrDownload.classList.add("visible");
-        }
-      }, 200);
+      reader.onload = async (e) => {
+        const imgData = e.target.result;
+
+        const result = await Tesseract.recognize(
+          imgData,
+          "eng", // يمكن تجربة "ara" للعربية إذا كانت مدعومة في البيئة
+          {
+            logger: (m) => {
+              if (m.status === "recognizing text") {
+                const p = Math.round(m.progress * 100);
+                statusEl.textContent = `جاري التعرف على النص... ${p}%`;
+              }
+            },
+          }
+        );
+
+        outputText.value = result.data.text.trim() || "لم يتم العثور على نص واضح في الصورة.";
+        statusEl.textContent = "تم الانتهاء من استخراج النص.";
+      };
+
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "حدث خطأ أثناء قراءة الصورة.";
+      alert("حدث خطأ أثناء معالجة الصورة.");
     }
+  });
 
-    btnQrGenerate.addEventListener("click", () => {
-      const txt = qrText.value.trim();
-      if (!txt) {
-        alert("  اكتب نصاً أو رابطاً أولاً.");
-        return;
-      }
-      createQr(txt);
-    });
+  // زر النسخ
+  copyBtn.addEventListener("click", async () => {
+    const txt = outputText.value.trim();
+    if (!txt) {
+      alert("لا يوجد نص لنسخه.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(txt);
+      statusEl.textContent = "تم نسخ النص إلى الحافظة.";
+    } catch {
+      statusEl.textContent = "لم يتم النسخ، جرّب نسخ النص يدوياً.";
+    }
+  });
 
-    btnQrClear.addEventListener("click", () => {
-      qrText.value = "";
-      resetQr();
-    });
+  // زر مسح
+  clearBtn.addEventListener("click", () => {
+    imageInput.value = "";
+    fileName.textContent = "";
+    outputText.value = "";
+    statusEl.textContent = "";
+  });
+</script>
 
-    // أول تحميل
-    resetQr();
-  </script>
 </body>
 </html>
