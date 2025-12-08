@@ -1,206 +1,444 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>A5 Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<title>A5 Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+<style>
 
-    body {
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #1f2933 0, #020617 45%, #000 100%);
-      color: #e5e7eb;
-      line-height: 1.7;
-    }
+/* ===================== GLOBAL ===================== */
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #1a1a28 0%, #0b0b12 50%, #000 100%);
+  font-family: "Segoe UI", sans-serif;
+  color: #e5e7eb;
+}
 
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px 60px;
-    }
+.page {
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px;
+}
 
-    /* NAV */
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
-    }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
-    .logo {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #a855f7;
-    }
+/* ===================== HEADER ===================== */
 
-    /* HERO */
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 32px;
-      align-items: center;
-      padding: 32px 24px;
-      border-radius: 26px;
-      background: #111827c7;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      margin-bottom: 42px;
-    }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 16px;
+}
 
-    .hero-title {
-      font-size: clamp(28px, 4vw, 38px);
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .hero-sub {
-      font-size: 15px;
-      color: #9ca3af;
-      max-width: 420px;
-      margin-bottom: 24px;
-    }
+.logo-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #a855f7;
+  box-shadow: 0 0 12px #a855f7aa;
+}
 
-    .btn-main {
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      color: #f9fafb;
-      margin-bottom: 10px;
-    }
+.logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: #c084fc;
+}
 
-    /* PRODUCTS */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+.cart-btn {
+  background: linear-gradient(135deg, #a855f7, #6d28d9);
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+}
 
-    .product-card {
-      background: #0f172ac7;
-      border-radius: 20px;
-      padding: 14px;
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
-    }
+/* ===================== PRODUCTS ===================== */
 
-    .product-image {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      border-radius: 15px;
-      background-size: cover;
-      background-position: center;
-      margin-bottom: 10px;
-    }
+.section-title {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: 700;
+}
 
-    .btn-order {
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: #a855f7;
-      color: white;
-      font-size: 13px;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-      margin-top: 10px;
-    }
+.section-sub {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
 
-    @media (max-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .hero-sub {
-        margin: auto;
-      }
-    }
-  </style>
+.products-grid {
+  margin-top: 18px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.product-card {
+  background: #11111a;
+  border-radius: 18px;
+  padding: 12px;
+  border: 1px solid #27272a;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  transition: 0.22s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: #a855f7;
+  box-shadow: 0 16px 40px rgba(168,85,247,0.25);
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 8px;
+}
+
+.product-card h3 {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.product-card p {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+
+.product-card strong {
+  font-size: 13px;
+}
+
+.btn-add {
+  margin-top: 8px;
+  width: 100%;
+  padding: 9px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 10px 24px rgba(168,85,247,0.4);
+}
+
+/* ===================== CART PANEL ===================== */
+
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 320px;
+  height: 100%;
+  background: #0f0f17;
+  border-left: 2px solid #a855f7;
+  box-shadow: -5px 0 20px rgba(0,0,0,0.4);
+  padding: 18px;
+  transition: 0.35s ease;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.cart-panel.open {
+  right: 0;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cart-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #27272a;
+  font-size: 13px;
+}
+
+.cart-footer {
+  margin-top: 16px;
+  padding: 10px;
+  background: #181825;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.checkout-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 11px;
+  background: #22c55e;
+  color: #000;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.close-cart {
+  font-size: 18px;
+  color: #c084fc;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===================== MOBILE TWEAKS ===================== */
+
+@media (max-width: 768px) {
+  .page {
+    padding: 12px;
+  }
+
+  .logo-img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .cart-btn {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card {
+    padding: 10px;
+  }
+
+  .cart-panel {
+    width: 100%;
+    max-width: 360px;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-  <!-- رابط الطلب الموحد لجميع المنتجات -->
-  <script>
-    const orderLink = "https://instagram.com"; // ← غير الرقم هنا فقط
-  </script>
+<script>
+/* ========== رقم الواتساب الموحّد ========== */
+const WHATSAPP_NUMBER = "201000000000"; // ← غيّر الرقم هنا فقط
 
-  <div class="page">
+let cart = [];
 
-    <!-- NAV -->
-    <header class="nav">
-      <div class="logo">A5 Store</div>
-    </header>
+/* إضافة منتج للسلة */
+function addToCart(name, price){
+  cart.push({name, price});
+  alert("تمت إضافة المنتج إلى السلة ✔");
+}
 
-    <!-- HERO -->
-    <section class="hero">
-      <div>
-        <h1 class="hero-title">مرحباً في A5 Store</h1>
-        <p class="hero-sub">A5.</p>
+/* فتح/إغلاق السلة */
+function openCart(){
+  document.getElementById("cartPanel").classList.add("open");
+  renderCart();
+}
 
-        <button class="btn-main" id="viewWorkBtn">  STORE</button>
+function closeCart(){
+  document.getElementById("cartPanel").classList.remove("open");
+}
+
+/* عرض محتوى السلة */
+function renderCart(){
+  let box = document.getElementById("cartItems");
+  box.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((item) => {
+    total += item.price;
+    box.innerHTML += `
+      <div class="cart-item">
+        <strong>${item.name}</strong> — $${item.price}
       </div>
-    </section>
+    `;
+  });
 
-    <!-- PRODUCTS -->
-    <section id="portfolio">
-      <h2 style="margin-bottom: 10px;">منتجاتنا</h2>
+  document.getElementById("totalPrice").innerText = total.toFixed(2);
+}
 
-      <div class="products-grid">
+/* إتمام الطلب (واتساب) */
+function checkout(){
+  if(cart.length === 0){
+    alert("السلة فارغة");
+    return;
+  }
 
-        <!-- مثال منتج 1 (غيّر الصورة من هنا) -->
-        <div class="product-card">
-          <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
-          <h3>350  </h3>
-          <p style="font-size:13px;color:#9ca3af;">   TEST 1.</p>
-          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
-        </div>
+  let msg = "طلب جديد من A5 Store%0A%0A";
 
-        <!-- مثال منتج 2 -->
-        <div class="product-card">
-          <div class="product-image" style="background-image:url('logo/a5m5r.red.png');"></div>
-          <h3> 150</h3>
-          <p style="font-size:13px;color:#9ca3af;">  TEST 2.</p>
-          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
-        </div>
+  cart.forEach(item=>{
+    msg += `• ${item.name} — $${item.price}%0A`;
+  });
 
-        <!-- مثال منتج 3 -->
-        <div class="product-card">
-          <div class="product-image" style="background-image:url('logo/a5m5r.red.png');"></div>
-          <h3>250  </h3>
-          <p style="font-size:13px;color:#9ca3af;">   TEXT 3.</p>
-          <button class="btn-order" onclick="orderNow()">الطلب الآن</button>
-        </div>
+  msg += `%0Aالإجمالي: $${document.getElementById("totalPrice").innerText}`;
 
-      </div>
-    </section>
+  let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  window.open(url, "_blank");
+}
+
+</script>
+
+
+<div class="page">
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+
+    <div class="logo-wrap">
+      <!-- غيّر صورة المتجر من هنا -->
+      <img src="logo/a5m5r.blue.png" class="logo-img" alt="A5 Store Logo">
+      <div class="logo-text">A5 Store</div>
+    </div>
+
+    <button class="cart-btn" onclick="openCart()">🛒 السلة</button>
+
+  </header>
+
+  <!-- ========== PRODUCTS SECTION ========== -->
+  <h2 class="section-title">منتجات مميزة</h2>
+  <p class="section-sub">غيّر الصور والأسماء والأسعار كما يناسب منتجاتك.</p>
+
+  <div class="products-grid">
+
+    <!-- 1 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product1.jpg');"></div>
+      <h3>قالب صفحة شخصية داكن</h3>
+      <p>صفحة تعريفية فخمة وجاهزة للتعديل.</p>
+      <strong>$39</strong>
+      <button class="btn-add" onclick="addToCart('قالب صفحة شخصية داكن', 39)">إضافة للسلة</button>
+    </div>
+
+    <!-- 2 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product2.jpg');"></div>
+      <h3>حزمة بوستات سوشيال</h3>
+      <p>تصاميم جاهزة للإنستغرام والتيك توك.</p>
+      <strong>$25</strong>
+      <button class="btn-add" onclick="addToCart('حزمة بوستات سوشيال', 25)">إضافة للسلة</button>
+    </div>
+
+    <!-- 3 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product3.jpg');"></div>
+      <h3>هوية مرئية كاملة</h3>
+      <p>شعار + ألوان + خطوط + دليل استخدام.</p>
+      <strong>$89</strong>
+      <button class="btn-add" onclick="addToCart('هوية مرئية كاملة', 89)">إضافة للسلة</button>
+    </div>
+
+    <!-- 4 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product4.jpg');"></div>
+      <h3>قالب متجر صفحة واحدة</h3>
+      <p>مثالي لمنتج واحد أو إطلاق خاص.</p>
+      <strong>$45</strong>
+      <button class="btn-add" onclick="addToCart('قالب متجر صفحة واحدة', 45)">إضافة للسلة</button>
+    </div>
+
+    <!-- 5 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product5.jpg');"></div>
+      <h3>Landing Page لحملة إعلان</h3>
+      <p>صفحة بسيطة مع دعوة لاتخاذ إجراء.</p>
+      <strong>$35</strong>
+      <button class="btn-add" onclick="addToCart('Landing Page لحملة إعلان', 35)">إضافة للسلة</button>
+    </div>
+
+    <!-- 6 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product6.jpg');"></div>
+      <h3>Portfolio للمصممين</h3>
+      <p>عرض أعمالك بأناقة واحترافية.</p>
+      <strong>$59</strong>
+      <button class="btn-add" onclick="addToCart('Portfolio للمصممين', 59)">إضافة للسلة</button>
+    </div>
+
+    <!-- 7 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product7.jpg');"></div>
+      <h3>صفحة تعريف لمؤثر</h3>
+      <p>روابط، إحصائيات، ومساحة للعروض.</p>
+      <strong>$42</strong>
+      <button class="btn-add" onclick="addToCart('صفحة تعريف لمؤثر', 42)">إضافة للسلة</button>
+    </div>
+
+    <!-- 8 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product8.jpg');"></div>
+      <h3>سيرة ذاتية تفاعلية</h3>
+      <p>CV كصفحة ويب حديثة.</p>
+      <strong>$32</strong>
+      <button class="btn-add" onclick="addToCart('سيرة ذاتية تفاعلية', 32)">إضافة للسلة</button>
+    </div>
+
+    <!-- 9 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product9.jpg');"></div>
+      <h3>Mini Brand Kit</h3>
+      <p>شعار بسيط + ألوان + نمط سريع.</p>
+      <strong>$19</strong>
+      <button class="btn-add" onclick="addToCart('Mini Brand Kit', 19)">إضافة للسلة</button>
+    </div>
+
+    <!-- 10 -->
+    <div class="product-card">
+      <div class="product-image" style="background-image:url('images/product10.jpg');"></div>
+      <h3>قالب صفحة هبوط لدورة</h3>
+      <p>مثالي للدورات الأونلاين.</p>
+      <strong>$49</strong>
+      <button class="btn-add" onclick="addToCart('قالب صفحة هبوط لدورة', 49)">إضافة للسلة</button>
+    </div>
 
   </div>
 
-  <script>
-    document.getElementById("viewWorkBtn").onclick = function () {
-      document.getElementById("portfolio").scrollIntoView({ behavior: "smooth" });
-    };
+</div>
 
-    function orderNow() {
-      window.open(orderLink, "_blank");
-    }
-  </script>
+<!-- ========== CART PANEL ========== -->
+<div id="cartPanel" class="cart-panel">
+  <div class="cart-header">
+    <h3>🛒 السلة</h3>
+    <button class="close-cart" onclick="closeCart()">✖</button>
+  </div>
+
+  <div id="cartItems"></div>
+
+  <div class="cart-footer">
+    الإجمالي: $<span id="totalPrice">0.00</span>
+    <button class="checkout-btn" onclick="checkout()">إتمام الطلب عبر واتساب</button>
+  </div>
+</div>
 
 </body>
 </html>
