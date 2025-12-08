@@ -1,354 +1,388 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<title>A5 Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>A5 Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
+  <style>
+    /* ============ GLOBAL ============ */
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1a1a28 0%, #0b0b12 50%, #000 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: #e5e7eb;
+    }
 
-/* ===================== GLOBAL ===================== */
+    .page {
+      max-width: 1200px;
+      margin: auto;
+      padding: 14px;
+    }
 
-body {
-  margin: 0;
-  padding: 0;
-  background: radial-gradient(circle at top, #1a1a28 0%, #0b0b12 50%, #000 100%);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  color: #e5e7eb;
-}
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-.page {
-  max-width: 1200px;
-  margin: auto;
-  padding: 14px;
-}
+    /* ============ HEADER ============ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0 10px;
+    }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-/* ===================== HEADER ===================== */
+    .logo-img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #a855f7;
+      box-shadow: 0 0 10px #a855f7aa;
+    }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 0 10px;
-}
+    .logo-text {
+      font-size: 17px;
+      font-weight: 800;
+      color: #c084fc;
+    }
 
-.logo-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .cart-btn {
+      background: linear-gradient(135deg, #a855f7, #6d28d9);
+      padding: 7px 11px;
+      border: none;
+      border-radius: 9px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-.logo-img {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #a855f7;
-  box-shadow: 0 0 10px #a855f7aa;
-}
+    .cart-badge {
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #22c55e;
+      color: #000;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
 
-.logo-text {
-  font-size: 17px;
-  font-weight: 800;
-  color: #c084fc;
-}
+    /* ============ CATEGORIES ============ */
+    .section-title {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
 
-.cart-btn {
-  background: linear-gradient(135deg, #a855f7, #6d28d9);
-  padding: 7px 11px;
-  border: none;
-  border-radius: 9px;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 12px;
-  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
-}
+    .section-sub {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 3px;
+    }
 
-/* ===================== PRODUCTS ===================== */
+    .categories {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
 
-.section-title {
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: 700;
-}
+    .cat-btn {
+      padding: 7px 12px;
+      font-size: 12px;
+      border-radius: 999px;
+      border: 1px solid #3f3f46;
+      background: #18181b;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
 
-.section-sub {
-  font-size: 12px;
-  color: #9ca3af;
-  margin-top: 3px;
-}
+    .cat-btn.active {
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border-color: transparent;
+      box-shadow: 0 6px 18px rgba(129, 140, 248, 0.3);
+    }
 
-.products-grid {
-  margin-top: 14px;
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
+    /* ============ PRODUCTS ============ */
+    .products-grid {
+      margin-top: 14px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
 
-.product-card {
-  background: #11111a;
-  border-radius: 16px;
-  padding: 10px;
-  border: 1px solid #27272a;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.45);
-  transition: 0.2s;
-}
+    .product-card {
+      background: #11111a;
+      border-radius: 14px;
+      padding: 9px;
+      border: 1px solid #27272a;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+      transition: 0.18s;
+      font-size: 12px;
+    }
 
-.product-card:hover {
-  transform: translateY(-3px);
-  border-color: #a855f7;
-  box-shadow: 0 14px 32px rgba(168,85,247,0.25);
-}
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: #a855f7;
+      box-shadow: 0 14px 32px rgba(168,85,247,0.25);
+    }
 
-.product-image {
-  width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: 11px;
-  background-size: cover;
-  background-position: center;
-  margin-bottom: 6px;
-}
+    .product-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 11px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 6px;
+    }
 
-.product-card h3 {
-  font-size: 13px;
-  margin-bottom: 2px;
-}
+    .product-card h3 {
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
 
-.product-card p {
-  font-size: 11px;
-  color: #9ca3af;
-  margin-bottom: 3px;
-}
+    .product-card p {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 3px;
+    }
 
-.product-card strong {
-  font-size: 12px;
-}
+    .product-card strong {
+      font-size: 12px;
+    }
 
-.btn-add {
-  margin-top: 7px;
-  width: 100%;
-  padding: 8px;
-  border-radius: 9px;
-  border: none;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 12px;
-  box-shadow: 0 8px 20px rgba(168,85,247,0.4);
-}
+    .btn-add {
+      margin-top: 6px;
+      width: 100%;
+      padding: 7px;
+      border-radius: 9px;
+      border: none;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 11px;
+      box-shadow: 0 8px 20px rgba(168,85,247,0.4);
+    }
 
-/* ===================== CART PANEL ===================== */
+    /* ============ CART PANEL ============ */
+    .cart-panel {
+      position: fixed;
+      top: 0;
+      right: -360px;
+      width: 320px;
+      max-width: 100%;
+      height: 100%;
+      background: #0f0f17;
+      border-left: 2px solid #a855f7;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.4);
+      padding: 14px;
+      transition: 0.35s ease;
+      overflow-y: auto;
+      z-index: 50;
+    }
 
-.cart-panel {
-  position: fixed;
-  top: 0;
-  right: -360px;
-  width: 320px;
-  max-width: 100%;
-  height: 100%;
-  background: #0f0f17;
-  border-left: 2px solid #a855f7;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.4);
-  padding: 16px;
-  transition: 0.35s ease;
-  overflow-y: auto;
-  z-index: 50;
-}
+    .cart-panel.open {
+      right: 0;
+    }
 
-.cart-panel.open {
-  right: 0;
-}
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
 
-.cart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
+    .cart-header h3 {
+      font-size: 15px;
+    }
 
-.cart-header h3 {
-  font-size: 15px;
-}
+    .close-cart {
+      font-size: 16px;
+      color: #c084fc;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
 
-.cart-item {
-  padding: 8px 0;
-  border-bottom: 1px solid #27272a;
-  font-size: 12px;
-}
+    .cart-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #27272a;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
 
-.cart-footer {
-  margin-top: 14px;
-  padding: 9px;
-  background: #181825;
-  border-radius: 9px;
-  font-size: 12px;
-}
+    .cart-item-main {
+      max-width: 70%;
+    }
 
-.checkout-btn {
-  margin-top: 8px;
-  width: 100%;
-  padding: 10px;
-  background: #22c55e;
-  color: #000;
-  border-radius: 9px;
-  border: none;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-}
+    .cart-item-meta {
+      text-align: left;
+      font-size: 11px;
+      color: #9ca3af;
+    }
 
-.close-cart {
-  font-size: 16px;
-  color: #c084fc;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
+    .cart-footer {
+      margin-top: 14px;
+      padding: 9px;
+      background: #181825;
+      border-radius: 9px;
+      font-size: 12px;
+    }
 
-/* ===================== MOBILE TWEAKS ===================== */
+    .checkout-btn {
+      margin-top: 8px;
+      width: 100%;
+      padding: 10px;
+      background: #22c55e;
+      color: #000;
+      border-radius: 9px;
+      border: none;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
-@media (max-width: 768px) {
-  .page {
-    padding: 10px;
-  }
+    /* ============ TOAST ============ */
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%) translateY(120%);
+      background: #18181b;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      border: 1px solid #3f3f46;
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 60;
+    }
 
-  .logo-img {
-    width: 40px;
-    height: 40px;
-  }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
 
-  .logo-text {
-    font-size: 15px;
-  }
+    #toast button {
+      border: none;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #fff;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      cursor: pointer;
+    }
 
-  .cart-btn {
-    font-size: 11px;
-    padding: 6px 10px;
-  }
+    /* ============ MOBILE TWEAKS ============ */
+    @media (max-width: 768px) {
+      .page {
+        padding: 10px;
+      }
 
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
+      .logo-img {
+        width: 38px;
+        height: 38px;
+      }
 
-  .product-card {
-    padding: 9px;
-  }
+      .logo-text {
+        font-size: 14px;
+      }
 
-  .product-card h3 {
-    font-size: 12px;
-  }
+      .cart-btn {
+        font-size: 11px;
+        padding: 6px 9px;
+      }
 
-  .product-card p {
-    font-size: 11px;
-  }
+      .products-grid {
+        grid-template-columns: 1fr 1fr;
+      }
 
-  .btn-add {
-    font-size: 11px;
-    padding: 7px;
-  }
+      .product-card {
+        padding: 8px;
+      }
 
-  .cart-panel {
-    width: 100%;
-  }
-}
+      .product-card h3 {
+        font-size: 11px;
+      }
 
-</style>
+      .product-card p {
+        font-size: 10px;
+      }
+
+      .btn-add {
+        font-size: 10px;
+        padding: 6px;
+      }
+
+      .cart-panel {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<script>
-/* ========== رقم الواتساب الموحّد ========== */
-const WHATSAPP_NUMBER = "201000000000"; // ← غيّر الرقم هنا فقط
-
-let cart = [];
-
-/* إضافة منتج للسلة */
-function addToCart(name, price){
-  cart.push({name, price});
-  alert("تمت إضافة المنتج إلى السلة ✔");
-}
-
-/* فتح/إغلاق السلة */
-function openCart(){
-  document.getElementById("cartPanel").classList.add("open");
-  renderCart();
-}
-
-function closeCart(){
-  document.getElementById("cartPanel").classList.remove("open");
-}
-
-/* عرض محتوى السلة */
-function renderCart(){
-  let box = document.getElementById("cartItems");
-  box.innerHTML = "";
-
-  let total = 0;
-
-  cart.forEach((item) => {
-    total += item.price;
-    box.innerHTML += `
-      <div class="cart-item">
-        <strong>${item.name}</strong> — $${item.price}
-      </div>
-    `;
-  });
-
-  document.getElementById("totalPrice").innerText = total.toFixed(2);
-}
-
-/* إتمام الطلب (واتساب) */
-function checkout(){
-  if(cart.length === 0){
-    alert("السلة فارغة");
-    return;
-  }
-
-  let msg = "طلب جديد من A5 Store%0A%0A";
-
-  cart.forEach(item=>{
-    msg += `• ${item.name} — $${item.price}%0A`;
-  });
-
-  msg += `%0Aالإجمالي: $${document.getElementById("totalPrice").innerText}`;
-
-  let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-  window.open(url, "_blank");
-}
-</script>
-
 
 <div class="page">
 
   <!-- ========== HEADER ========== -->
   <header class="header">
-
     <div class="logo-wrap">
-      <!-- غيّر صورة المتجر من هنا -->
+      <!-- غيّر صورة المتجر هنا -->
       <img src="images/store-logo.jpg" class="logo-img" alt="A5 Store Logo">
       <div class="logo-text">A5 Store</div>
     </div>
 
-    <button class="cart-btn" onclick="openCart()">🛒 السلة</button>
-
+    <button class="cart-btn" onclick="openCart()">
+      🛒 السلة
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
   </header>
 
-  <!-- ========== PRODUCTS SECTION ========== -->
+  <!-- ========== SECTIONS / CATEGORIES ========== -->
   <h2 class="section-title">منتجات مميزة</h2>
-  <p class="section-sub">غيّر الصور والأسماء والأسعار كما يناسب منتجاتك.</p>
+  <p class="section-sub">اختر القسم، ثم أضف المنتجات للسلة وأكمل الطلب عبر واتساب.</p>
 
-  <div class="products-grid">
+  <div class="categories">
+    <button class="cat-btn active" data-category="all">الكل</button>
+    <button class="cat-btn" data-category="pages">قوالب وصفحات</button>
+    <button class="cat-btn" data-category="branding">براند & سوشيال</button>
+  </div>
 
-    <!-- 1 -->
-    <div class="product-card">
+  <!-- ========== PRODUCTS GRID ========== -->
+  <div class="products-grid" id="productsGrid">
+
+    <!-- ===== قسم القوالب والصفحات (6 منتجات) ===== -->
+    <div class="product-card" data-category="pages">
       <div class="product-image" style="background-image:url('images/product1.jpg');"></div>
       <h3>قالب صفحة شخصية داكن</h3>
       <p>صفحة تعريفية فخمة وجاهزة للتعديل.</p>
@@ -356,44 +390,39 @@ function checkout(){
       <button class="btn-add" onclick="addToCart('قالب صفحة شخصية داكن', 39)">إضافة للسلة</button>
     </div>
 
-    <!-- 2 -->
-    <div class="product-card">
+    <div class="product-card" data-category="pages">
       <div class="product-image" style="background-image:url('images/product2.jpg');"></div>
-      <h3>حزمة بوستات سوشيال</h3>
-      <p>تصاميم جاهزة للإنستغرام والتيك توك.</p>
-      <strong>$25</strong>
-      <button class="btn-add" onclick="addToCart('حزمة بوستات سوشيال', 25)">إضافة للسلة</button>
+      <h3>قالب صفحة هبوط دورة</h3>
+      <p>مثالي لعرض دورة أونلاين.</p>
+      <strong>$49</strong>
+      <button class="btn-add" onclick="addToCart('قالب صفحة هبوط دورة', 49)">إضافة للسلة</button>
     </div>
 
-    <!-- 3 -->
-    <div class="product-card">
+    <div class="product-card" data-category="pages">
       <div class="product-image" style="background-image:url('images/product3.jpg');"></div>
-      <h3>هوية مرئية كاملة</h3>
-      <p>شعار، ألوان، خطوط، ودليل استخدام.</p>
-      <strong>$89</strong>
-      <button class="btn-add" onclick="addToCart('هوية مرئية كاملة', 89)">إضافة للسلة</button>
-    </div>
-
-    <!-- 4 -->
-    <div class="product-card">
-      <div class="product-image" style="background-image:url('images/product4.jpg');"></div>
       <h3>قالب متجر صفحة واحدة</h3>
-      <p>مثالي لمنتج واحد أو إطلاق خاص.</p>
+      <p>منتج واحد أو عرض خاص.</p>
       <strong>$45</strong>
       <button class="btn-add" onclick="addToCart('قالب متجر صفحة واحدة', 45)">إضافة للسلة</button>
     </div>
 
-    <!-- 5 -->
-    <div class="product-card">
+    <div class="product-card" data-category="pages">
+      <div class="product-image" style="background-image:url('images/product4.jpg');"></div>
+      <h3>سيرة ذاتية تفاعلية</h3>
+      <p>CV كصفحة ويب حديثة.</p>
+      <strong>$32</strong>
+      <button class="btn-add" onclick="addToCart('سيرة ذاتية تفاعلية', 32)">إضافة للسلة</button>
+    </div>
+
+    <div class="product-card" data-category="pages">
       <div class="product-image" style="background-image:url('images/product5.jpg');"></div>
       <h3>Landing Page لحملة إعلان</h3>
-      <p>صفحة بسيطة مع دعوة لاتخاذ إجراء.</p>
+      <p>صفحة بسيطة لتحويل العملاء.</p>
       <strong>$35</strong>
       <button class="btn-add" onclick="addToCart('Landing Page لحملة إعلان', 35)">إضافة للسلة</button>
     </div>
 
-    <!-- 6 -->
-    <div class="product-card">
+    <div class="product-card" data-category="pages">
       <div class="product-image" style="background-image:url('images/product6.jpg');"></div>
       <h3>Portfolio للمصممين</h3>
       <p>عرض أعمالك بأناقة واحترافية.</p>
@@ -401,44 +430,56 @@ function checkout(){
       <button class="btn-add" onclick="addToCart('Portfolio للمصممين', 59)">إضافة للسلة</button>
     </div>
 
-    <!-- 7 -->
-    <div class="product-card">
+    <!-- ===== قسم البراند والسوشيال (6 منتجات) ===== -->
+    <div class="product-card" data-category="branding">
       <div class="product-image" style="background-image:url('images/product7.jpg');"></div>
-      <h3>صفحة تعريف لمؤثر</h3>
-      <p>روابط، أرقام، ومساحة للعروض.</p>
-      <strong>$42</strong>
-      <button class="btn-add" onclick="addToCart('صفحة تعريف لمؤثر', 42)">إضافة للسلة</button>
+      <h3>حزمة بوستات سوشيال</h3>
+      <p>تصاميم جاهزة لإنستغرام وتيك توك.</p>
+      <strong>$25</strong>
+      <button class="btn-add" onclick="addToCart('حزمة بوستات سوشيال', 25)">إضافة للسلة</button>
     </div>
 
-    <!-- 8 -->
-    <div class="product-card">
+    <div class="product-card" data-category="branding">
       <div class="product-image" style="background-image:url('images/product8.jpg');"></div>
-      <h3>سيرة ذاتية تفاعلية</h3>
-      <p>CV كصفحة ويب حديثة.</p>
-      <strong>$32</strong>
-      <button class="btn-add" onclick="addToCart('سيرة ذاتية تفاعلية', 32)">إضافة للسلة</button>
+      <h3>هوية مرئية كاملة</h3>
+      <p>شعار، ألوان، خطوط، ودليل استخدام.</p>
+      <strong>$89</strong>
+      <button class="btn-add" onclick="addToCart('هوية مرئية كاملة', 89)">إضافة للسلة</button>
     </div>
 
-    <!-- 9 -->
-    <div class="product-card">
+    <div class="product-card" data-category="branding">
       <div class="product-image" style="background-image:url('images/product9.jpg');"></div>
       <h3>Mini Brand Kit</h3>
-      <p>شعار بسيط + ألوان + نمط سريع.</p>
+      <p>شعار بسيط + ألوان سريعة.</p>
       <strong>$19</strong>
       <button class="btn-add" onclick="addToCart('Mini Brand Kit', 19)">إضافة للسلة</button>
     </div>
 
-    <!-- 10 -->
-    <div class="product-card">
+    <div class="product-card" data-category="branding">
       <div class="product-image" style="background-image:url('images/product10.jpg');"></div>
-      <h3>قالب صفحة هبوط لدورة</h3>
-      <p>مثالي للدورات الأونلاين.</p>
-      <strong>$49</strong>
-      <button class="btn-add" onclick="addToCart('قالب صفحة هبوط لدورة', 49)">إضافة للسلة</button>
+      <h3>حزمة Covers لقنوات</h3>
+      <p>كفرات جاهزة ليوتيوب وتويتش.</p>
+      <strong>$27</strong>
+      <button class="btn-add" onclick="addToCart('حزمة Covers لقنوات', 27)">إضافة للسلة</button>
+    </div>
+
+    <div class="product-card" data-category="branding">
+      <div class="product-image" style="background-image:url('images/product11.jpg');"></div>
+      <h3>قوالب إعلانات ممولة</h3>
+      <p>تصاميم جاهزة للإعلانات المدفوعة.</p>
+      <strong>$41</strong>
+      <button class="btn-add" onclick="addToCart('قوالب إعلانات ممولة', 41)">إضافة للسلة</button>
+    </div>
+
+    <div class="product-card" data-category="branding">
+      <div class="product-image" style="background-image:url('images/product12.jpg');"></div>
+      <h3>حزمة ستوري تفاعلية</h3>
+      <p>قصص جاهزة للتفاعل مع الجمهور.</p>
+      <strong>$29</strong>
+      <button class="btn-add" onclick="addToCart('حزمة ستوري تفاعلية', 29)">إضافة للسلة</button>
     </div>
 
   </div>
-
 </div>
 
 <!-- ========== CART PANEL ========== -->
@@ -455,6 +496,133 @@ function checkout(){
     <button class="checkout-btn" onclick="checkout()">إتمام الطلب عبر واتساب</button>
   </div>
 </div>
+
+<!-- ========== TOAST (تأكيد الإضافة) ========== -->
+<div id="toast">
+  <span id="toastText">تمت إضافة المنتج إلى السلة</span>
+  <button onclick="goToCart()">عرض السلة</button>
+</div>
+
+<script>
+  /* ========== إعداد الواتساب ========== */
+  const WHATSAPP_NUMBER = "201000000000"; // ← غيّر الرقم هنا فقط
+
+  let cart = [];
+
+  /* إضافة للسلة مع كميات */
+  function addToCart(name, price) {
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    updateCartCount();
+    showToast(name);
+  }
+
+  /* تحديث عدد العناصر في السلة (البادج) */
+  function updateCartCount() {
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById("cartCount").innerText = count;
+  }
+
+  /* فتح/إغلاق السلة */
+  function openCart() {
+    document.getElementById("cartPanel").classList.add("open");
+    renderCart();
+  }
+
+  function closeCart() {
+    document.getElementById("cartPanel").classList.remove("open");
+  }
+
+  /* عرض محتوى السلة */
+  function renderCart() {
+    const box = document.getElementById("cartItems");
+    box.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+
+      box.innerHTML += `
+        <div class="cart-item">
+          <div class="cart-item-main">
+            <strong>${item.name}</strong>
+            <div class="cart-item-meta">
+              الكمية: ${item.qty} × $${item.price}
+            </div>
+          </div>
+          <div>
+            $${subtotal.toFixed(2)}
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById("totalPrice").innerText = total.toFixed(2);
+  }
+
+  /* إتمام الطلب عبر واتساب */
+  function checkout() {
+    if (cart.length === 0) {
+      alert("السلة فارغة");
+      return;
+    }
+
+    let msg = "طلب جديد من A5 Store%0A%0A";
+    cart.forEach(item => {
+      msg += `• ${item.name} — الكمية: ${item.qty} — الإجمالي: $${(item.price * item.qty).toFixed(2)}%0A`;
+    });
+    msg += `%0Aالإجمالي الكلي: $${document.getElementById("totalPrice").innerText}`;
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+    window.open(url, "_blank");
+  }
+
+  /* Toast رسالة التأكيد */
+  let toastTimeout;
+  function showToast(productName) {
+    const toast = document.getElementById("toast");
+    const text = document.getElementById("toastText");
+    text.innerText = `تمت إضافة "${productName}" إلى السلة`;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2500);
+  }
+
+  function goToCart() {
+    document.getElementById("toast").classList.remove("show");
+    openCart();
+  }
+
+  /* فلترة الأقسام */
+  const catButtons = document.querySelectorAll(".cat-btn");
+  const productCards = document.querySelectorAll(".product-card");
+
+  catButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const category = btn.getAttribute("data-category");
+
+      catButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      productCards.forEach(card => {
+        const cardCat = card.getAttribute("data-category");
+        if (category === "all" || cardCat === category) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
