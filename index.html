@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-
 /* ===================== GLOBAL ===================== */
 
 body {
@@ -69,6 +68,24 @@ a {
   box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
 }
 
+/* زر منتجات أخرى */
+.more-products-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid #4c1d95;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(15,23,42,0.7);
+}
+
+.more-products-btn:hover {
+  background: #111827;
+}
+
 /* ===================== PRODUCTS ===================== */
 
 .section-title {
@@ -91,6 +108,9 @@ a {
   border: 1px solid #27272a;
   box-shadow: 0 12px 32px rgba(0,0,0,0.45);
   transition: 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .product-card:hover {
@@ -99,17 +119,35 @@ a {
   box-shadow: 0 18px 50px rgba(168,85,247,0.25);
 }
 
+.product-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.product-desc {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* الصورة كاملة والكلام فوقها */
 .product-image {
   width: 100%;
-  aspect-ratio: 4/3;
   border-radius: 14px;
-  background-size: cover;
+  background-size: contain;   /* عشان تعرض الصورة كاملة */
   background-position: center;
-  margin-bottom: 12px;
+  background-repeat: no-repeat;
+  background-color: #020617;
+  aspect-ratio: 4/3;
+}
+
+.product-price {
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 6px;
 }
 
 .btn-add {
-  margin-top: 12px;
+  margin-top: 8px;
   width: 100%;
   padding: 12px;
   border-radius: 12px;
@@ -122,51 +160,114 @@ a {
   box-shadow: 0 12px 30px rgba(168,85,247,0.4);
 }
 
-/* ===================== CART PANEL ===================== */
+/* ===================== CART PANEL (من أعلى) ===================== */
 
 .cart-panel {
   position: fixed;
-  top: 0;
-  right: -400px;
-  width: 340px;
-  height: 100%;
-  background: #0f0f17;
-  border-left: 2px solid #a855f7;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.4);
-  padding: 22px;
+  left: 0;
+  right: 0;
+  top: -100%;
+  max-height: 75vh;
+  background: #020617;
+  border-bottom: 2px solid #a855f7;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+  padding: 18px 18px 22px;
   transition: 0.35s ease;
   overflow-y: auto;
+  z-index: 50;
+  border-radius: 0 0 18px 18px;
 }
 
 .cart-panel.open {
-  right: 0;
+  top: 0;
+}
+
+.cart-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .cart-item {
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #27272a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cart-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-item-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-item-price {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* زر إزالة المنتج */
+.cart-remove {
+  background: transparent;
+  border: 1px solid #4b5563;
+  color: #f97373;
+  border-radius: 999px;
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-remove:hover {
+  border-color: #f97373;
+  background: rgba(248,113,113,0.1);
 }
 
 .cart-footer {
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 12px;
-  background: #181825;
+  background: #0b1120;
   border-radius: 12px;
+  border: 1px solid #1f2937;
 }
 
+.cart-total-row {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* أزرار الدفع */
 .checkout-btn {
-  margin-top: 12px;
+  margin-top: 10px;
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background: #22c55e;
   color: #000;
   border-radius: 12px;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
 }
 
+.checkout-btn.secondary {
+  margin-top: 8px;
+  background: #16a34a;
+  opacity: 0.9;
+}
+
+/* زر إغلاق */
 .close-cart {
   font-size: 20px;
   color: #c084fc;
@@ -175,20 +276,75 @@ a {
   cursor: pointer;
 }
 
+/* كابسولة ABOUT + الروابط */
+.about-pill {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #a855f7;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.about-pill:hover {
+  background: rgba(168,85,247,0.12);
+}
+
+.about-pill span.icon {
+  font-size: 14px;
+}
+
+.about-box {
+  display: none;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #e5e7eb;
+}
+
+.about-box a {
+  display: block;
+  margin-top: 4px;
+  color: #c084fc;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 600px) {
+  .page {
+    padding: 14px;
+  }
+  .header {
+    padding-top: 8px;
+  }
+  .logo-text {
+    font-size: 18px;
+  }
+  .cart-panel {
+    padding: 14px;
+    max-height: 80vh;
+  }
+}
 </style>
 </head>
 
 <body>
 
 <script>
-/* ========== إعداد الرقم ========= */
-const WHATSAPP_NUMBER = "01503737308"; // ← غير الرقم هنا
+/* ========== إعدادات التواصل ========= */
+const WHATSAPP_NUMBER = "01503737308"; // ← غير الرقم هنا لو حابب
+const INSTAGRAM_USER = "amr1v";        // ← اسم حساب إنستجرام
 
 let cart = [];
 
 /* ========== إضافة للسلة ========== */
 function addToCart(name, price){
   cart.push({name, price});
+  renderCart();
   alert("تمت الإضافة إلى السلة ✔");
 }
 
@@ -200,6 +356,37 @@ function openCart(){
 
 function closeCart(){
   document.getElementById("cartPanel").classList.remove("open");
+}
+
+/* ========== إزالة منتج من السلة ========== */
+function removeFromCart(index){
+  cart.splice(index, 1);
+  renderCart();
+}
+
+/* ========== بناء نص الطلب ========== */
+function buildOrderMessage(){
+  let total = 0;
+  let lines = [];
+
+  lines.push("طلب جديد من متجر A5 Store");
+  lines.push("------------------------------");
+
+  cart.forEach(item => {
+    total += item.price;
+    lines.push(`• ${item.name} — $${item.price}`);
+  });
+
+  lines.push("------------------------------");
+  lines.push(`الإجمالي: $${total}`);
+  lines.push("");
+  lines.push("من فضلك قم بتأكيد الطلب وطريقة الاستلام/الشحن.");
+
+  return {
+    text: lines.join("\n"),
+    urlEncoded: lines.join("%0A"),
+    total: total
+  };
 }
 
 /* ========== عرض محتوى السلة ========== */
@@ -214,7 +401,11 @@ function renderCart(){
 
     box.innerHTML += `
       <div class="cart-item">
-        <strong>${item.name}</strong> — $${item.price}
+        <div class="cart-item-main">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">$${item.price}</div>
+        </div>
+        <button class="cart-remove" onclick="removeFromCart(${i})">✖</button>
       </div>
     `;
   });
@@ -222,87 +413,136 @@ function renderCart(){
   document.getElementById("totalPrice").innerText = total;
 }
 
-/* ========== إتمام الطلب (واتساب) ========== */
-function checkout(){
+/* ========== إتمام الطلب عبر إنستجرام ========== */
+function checkoutInstagram(){
   if(cart.length === 0){
     alert("السلة فارغة");
     return;
   }
 
-  let msg = "طلب جديد من A5 Store%0A%0A";
+  const msg = buildOrderMessage();
 
-  cart.forEach(item=>{
-    msg += `• ${item.name} — $${item.price}%0A`;
-  });
+  // محاولة نسخ الرسالة تلقائياً
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(msg.text).then(() => {
+      alert("تم نسخ تفاصيل الطلب ✅ سيتم فتح إنستجرام الآن، فقط قم بلصق الرسالة في المحادثة.");
+    }).catch(() => {
+      alert("تم تجهيز تفاصيل الطلب ✅ إذا لم تُنسخ تلقائياً، انسخها يدوياً بعد فتح إنستجرام.");
+    });
+  } else {
+    alert("تم تجهيز تفاصيل الطلب ✅ انسخها يدوياً بعد فتح إنستجرام.");
+  }
 
-  msg += `%0Aالإجمالي: $${document.getElementById("totalPrice").innerText}`;
-
-  let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  // فتح محادثة إنستجرام مع الحساب
+  const url = `https://ig.me/m/${INSTAGRAM_USER}`;
   window.open(url, "_blank");
 }
 
+/* ========== إتمام الطلب عبر واتساب (اختياري) ========== */
+function checkoutWhatsApp(){
+  if(cart.length === 0){
+    alert("السلة فارغة");
+    return;
+  }
+
+  const msg = buildOrderMessage();
+  let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg.urlEncoded}`;
+  window.open(url, "_blank");
+}
+
+/* ========== إظهار/إخفاء صندوق About ========== */
+function toggleAbout(){
+  const box = document.getElementById("aboutBox");
+  box.style.display = (box.style.display === "block") ? "none" : "block";
+}
 </script>
 
 
 <div class="page">
 
-<!-- ========== HEADER ========== -->
-<header class="header">
+  <!-- ========== HEADER ========== -->
+  <header class="header">
 
-  <div class="logo-wrap">
-    <img src="logo/a5m5r.blue.png" class="logo-img" alt="Logo"> <!-- ← غيّر الصورة -->
-    <div class="logo-text">A5 Store</div>
-  </div>
+    <div class="logo-wrap">
+      <img src="logo/a5m5r.blue.png" class="logo-img" alt="Logo"> <!-- ← غيّر الصورة -->
+      <div class="logo-text">A5 Store</div>
+    </div>
 
-  <button class="cart-btn" onclick="openCart()">🛒 السلة</button>
+    <button class="cart-btn" onclick="openCart()">🛒 السلة</button>
 
-</header>
+  </header>
 
+  <!-- زر منتجات أخرى -->
+  <button class="more-products-btn" onclick="window.location.href='https://example.com'">
+    منتجات أخرى
+  </button>
+  <!-- ↑ غيّر الرابط https://example.com إلى موقعك الثاني -->
 
-<!-- ========== PRODUCTS SECTION ========== -->
-<h2 class="section-title"> منتجات A5 Store</h2>
+  <!-- ========== PRODUCTS SECTION ========== -->
+  <h2 class="section-title">منتجات A5 Store</h2>
 
-<div class="products-grid">
+  <div class="products-grid">
 
-  <div class="product-card">
-    <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
-    <h3>test1  </h3>
-    <p>  test1 2</p>
-    <strong>$39</strong>
-    <button class="btn-add" onclick="addToCart('  test1 name', 39)">إضافة للسلة</button>
-  </div>
+    <div class="product-card">
+      <h3 class="product-title">test1</h3>
+      <p class="product-desc">test1 2</p>
+      <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
+      <div class="product-price">$39</div>
+      <button class="btn-add" onclick="addToCart('test1 name', 39)">إضافة للسلة</button>
+    </div>
 
-  <div class="product-card">
-    <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
-    <h3> test2</h3>
-    <p>  test2 2</p>
-    <strong>$25</strong>
-    <button class="btn-add" onclick="addToCart(' test2 name', 25)">إضافة للسلة</button>
-  </div>
+    <div class="product-card">
+      <h3 class="product-title">test2</h3>
+      <p class="product-desc">test2 2</p>
+      <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
+      <div class="product-price">$25</div>
+      <button class="btn-add" onclick="addToCart('test2 name', 25)">إضافة للسلة</button>
+    </div>
 
-  <div class="product-card">
-    <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
-    <h3> test3</h3>
-    <p>test3 2   </p>
-    <strong>$89</strong>
-    <button class="btn-add" onclick="addToCart(' test3 name', 89)">إضافة للسلة</button>
+    <div class="product-card">
+      <h3 class="product-title">test3</h3>
+      <p class="product-desc">test3 2</p>
+      <div class="product-image" style="background-image:url('logo/a5m5r.blue.png');"></div>
+      <div class="product-price">$89</div>
+      <button class="btn-add" onclick="addToCart('test3 name', 89)">إضافة للسلة</button>
+    </div>
+
   </div>
 
 </div>
 
-</div>
-
-<!-- ========== CART PANEL ========== -->
+<!-- ========== CART PANEL (من أعلى) ========== -->
 <div id="cartPanel" class="cart-panel">
-  <button onclick="closeCart()" class="close-cart">✖</button>
+  <div class="cart-header-row">
+    <h3>🛒 السلة</h3>
+    <button onclick="closeCart()" class="close-cart">✖</button>
+  </div>
 
-  <h3>🛒 السلة</h3>
-
-  <div id="cartItems" style="margin-top:20px;"></div>
+  <div id="cartItems" style="margin-top:12px;"></div>
 
   <div class="cart-footer">
-    الإجمالي: $<span id="totalPrice">0</span>
-    <button class="checkout-btn" onclick="checkout()">إتمام الطلب</button>
+    <div class="cart-total-row">
+      الإجمالي: $<span id="totalPrice">0</span>
+    </div>
+
+    <button class="checkout-btn" onclick="checkoutInstagram()">
+      إتمام الطلب عبر إنستجرام
+    </button>
+
+    <button class="checkout-btn secondary" onclick="checkoutWhatsApp()">
+      إتمام الطلب عبر واتساب
+    </button>
+
+    <div class="about-pill" onclick="toggleAbout()">
+      <span class="icon">ℹ️</span>
+      <span>About</span>
+    </div>
+
+    <div id="aboutBox" class="about-box">
+      <p>تابعنا وتواصل معنا:</p>
+      <a href="https://instagram.com/amr1v" target="_blank">إنستجرام: @amr1v</a>
+      <a href="https://wa.me/01503737308" target="_blank">واتساب للتواصل السريع</a>
+    </div>
   </div>
 </div>
 
