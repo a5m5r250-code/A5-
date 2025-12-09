@@ -133,7 +133,7 @@ a {
 .product-image {
   width: 100%;
   border-radius: 14px;
-  background-size: contain;   /* عشان تعرض الصورة كاملة */
+  background-size: contain;   /* تعرض الصورة كاملة */
   background-position: center;
   background-repeat: no-repeat;
   background-color: #020617;
@@ -261,9 +261,11 @@ a {
   cursor: pointer;
 }
 
+/* نفس درجة اللون لواتساب */
 .checkout-btn.secondary {
   margin-top: 8px;
-  background: #16a34a;
+  background: #22c55e;
+  color: #000;
   opacity: 0.9;
 }
 
@@ -312,6 +314,43 @@ a {
   color: #c084fc;
 }
 
+/* صندوق نص الطلب */
+.order-preview-box {
+  display: none;
+  margin-top: 12px;
+}
+
+.order-preview-box label {
+  font-size: 12px;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.order-preview-box textarea {
+  width: 100%;
+  min-height: 90px;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 12px;
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+.copy-btn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background: #111827;
+  color: #e5e7eb;
+  font-size: 12px;
+  cursor: pointer;
+}
+
 /* ===================== RESPONSIVE ===================== */
 
 @media (max-width: 600px) {
@@ -336,8 +375,9 @@ a {
 
 <script>
 /* ========== إعدادات التواصل ========= */
-const WHATSAPP_NUMBER = "01503737308"; // ← غير الرقم هنا لو حابب
-const INSTAGRAM_USER = "amr1v";        // ← اسم حساب إنستجرام
+/* رقم واتساب لازم يكون دولي بدون + وبدون صفر في البداية */
+const WHATSAPP_NUMBER = "201503737308"; // +20 150 373 7308
+const INSTAGRAM_USER = "amr1v";         // اسم حساب إنستجرام
 
 let cart = [];
 
@@ -382,10 +422,19 @@ function buildOrderMessage(){
   lines.push("");
   lines.push("من فضلك قم بتأكيد الطلب وطريقة الاستلام/الشحن.");
 
+  const text = lines.join("\n");
+  const urlEncoded = lines.join("%0A");
+
+  // إظهار النص في صندوق المعاينة
+  const box = document.getElementById("orderPreviewBox");
+  const ta  = document.getElementById("orderPreview");
+  box.style.display = "block";
+  ta.value = text;
+
   return {
-    text: lines.join("\n"),
-    urlEncoded: lines.join("%0A"),
-    total: total
+    text,
+    urlEncoded,
+    total
   };
 }
 
@@ -411,6 +460,35 @@ function renderCart(){
   });
 
   document.getElementById("totalPrice").innerText = total;
+
+  // لو السلة فاضية اخفي معاينة الطلب
+  if (cart.length === 0){
+    const boxPrev = document.getElementById("orderPreviewBox");
+    if (boxPrev) boxPrev.style.display = "none";
+  }
+}
+
+/* ========== نسخ نص الطلب ========== */
+function copyOrderText(){
+  const ta = document.getElementById("orderPreview");
+  if (!ta || !ta.value.trim()) {
+    alert("لا يوجد نص للنسخ حالياً.");
+    return;
+  }
+
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+
+  try {
+    const ok = document.execCommand("copy");
+    if (ok) {
+      alert("تم نسخ نص الطلب ✅ يمكنك لصقه مباشرة في إنستجرام.");
+    } else {
+      alert("لم يتم النسخ تلقائياً، حاول نسخ النص يدوياً.");
+    }
+  } catch(e){
+    alert("لم يتم النسخ تلقائياً، حاول نسخ النص يدوياً.");
+  }
 }
 
 /* ========== إتمام الطلب عبر إنستجرام ========== */
@@ -420,17 +498,17 @@ function checkoutInstagram(){
     return;
   }
 
-  const msg = buildOrderMessage();
+  const msg = buildOrderMessage(); // يحدث صندوق المعاينة أيضاً
 
-  // محاولة نسخ الرسالة تلقائياً
+  // محاولة نسخ الرسالة باستخدام Clipboard API (لو متوفر)
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(msg.text).then(() => {
-      alert("تم نسخ تفاصيل الطلب ✅ سيتم فتح إنستجرام الآن، فقط قم بلصق الرسالة في المحادثة.");
+      alert("تم تجهيز الطلب ✅ تم نسخ الرسالة، سيتم فتح إنستجرام الآن، فقط قم بلصق الرسالة في المحادثة.");
     }).catch(() => {
-      alert("تم تجهيز تفاصيل الطلب ✅ إذا لم تُنسخ تلقائياً، انسخها يدوياً بعد فتح إنستجرام.");
+      alert("تم تجهيز الطلب ✅ إذا لم تُنسخ تلقائياً، انسخ النص من الصندوق أسفل السلة.");
     });
   } else {
-    alert("تم تجهيز تفاصيل الطلب ✅ انسخها يدوياً بعد فتح إنستجرام.");
+    alert("تم تجهيز الطلب ✅ انسخ النص من الصندوق أسفل السلة.");
   }
 
   // فتح محادثة إنستجرام مع الحساب
@@ -438,15 +516,15 @@ function checkoutInstagram(){
   window.open(url, "_blank");
 }
 
-/* ========== إتمام الطلب عبر واتساب (اختياري) ========== */
+/* ========== إتمام الطلب عبر واتساب ========== */
 function checkoutWhatsApp(){
   if(cart.length === 0){
     alert("السلة فارغة");
     return;
   }
 
-  const msg = buildOrderMessage();
-  let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg.urlEncoded}`;
+  const msg = buildOrderMessage(); // يحدث صندوق المعاينة أيضاً
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg.urlEncoded}`;
   window.open(url, "_blank");
 }
 
@@ -533,6 +611,13 @@ function toggleAbout(){
       إتمام الطلب عبر واتساب
     </button>
 
+    <!-- معاينة نص الطلب -->
+    <div id="orderPreviewBox" class="order-preview-box">
+      <label>نص الطلب (جاهز للنسخ والإرسال في إنستجرام أو واتساب):</label>
+      <textarea id="orderPreview" readonly></textarea>
+      <button class="copy-btn" type="button" onclick="copyOrderText()">نسخ الرسالة</button>
+    </div>
+
     <div class="about-pill" onclick="toggleAbout()">
       <span class="icon">ℹ️</span>
       <span>About</span>
@@ -541,7 +626,7 @@ function toggleAbout(){
     <div id="aboutBox" class="about-box">
       <p>تابعنا وتواصل معنا:</p>
       <a href="https://instagram.com/amr1v" target="_blank">إنستجرام: @amr1v</a>
-      <a href="https://wa.me/01503737308" target="_blank">واتساب للتواصل السريع</a>
+      <a href="https://wa.me/201503737308" target="_blank">واتساب للتواصل السريع</a>
     </div>
   </div>
 </div>
